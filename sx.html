@@ -17,7 +17,6 @@
             margin: 12px;
         }
 
-        /* 新增删除按钮样式 */
         .delete-staff-btn {
             background: var(--danger);
             color: white;
@@ -40,7 +39,6 @@
             gap: 4px;
         }
 
-        /* 原有其他样式保持不变... */
         .month-tabs {
             display: flex;
             gap: 4px;
@@ -109,9 +107,9 @@
             justify-content: center;
         }
 
-        .work { background: #f0f0f0; color: #2e7d32; }
-        .rest { background: var(--primary); color: white; }
-        .leave { background: #fff8e1; color: #f9a825; }
+        .班 { background: #f0f0f0; color: #2e7d32; }
+        .休 { background: var(--primary); color: white; }
+        .假 { background: #fff8e1; color: #f9a825; }
 
         .log-panel {
             margin-top: 20px;
@@ -187,52 +185,47 @@
         .add-staff-btn:hover {
             opacity: 0.9;
         }
-.alert-banner {
-    position: fixed;
-    top: 60px;
-    left: 1800px;
-    background: var(--warning);
-    color: white;
-    padding: 16px 32px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    z-index: 999;
-}
+
+
+
+        /* 新增当前日期高亮样式 */
+        .current-day {
+            background-color: #00f0f1 !important;
+            border: 1px solid #0fffff !important;
+        }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+
 </head>
 <body>
-
-    <h2>2025年绍兴售后排班管理</h2>
+    <h2>
+        <span id="currentYear"></span>年绍兴售后排班管理
+        <select id="yearSelect" class="log-filter" style="margin-left: 15px;"></select>
+    </h2>
     <div class="alert-banner">
-        <span>⚠️</span>
-        <span>请勿擅自修改排班信息！</span>
+
     </div>
     
     <div class="export-panel">
-        <input type="date" id="startDate" class="log-filter" value="2025-05-01">
+        <input type="date" id="startDate" class="log-filter">
         <span>至</span>
-        <!-- ... 其余原有代码保持不变 ... -->
-        <input type="date" id="endDate" class="log-filter" value="2025-05-31">
+        <input type="date" id="endDate" class="log-filter">
+        <button class="danger-btn" onclick="showCustomSchedule()" style="background: var(--primary)">查看排班</button>
+        <button class="danger-btn" onclick="hideCustomSchedule()" style="background: var(--danger)">取消查看</button>
         <button class="danger-btn" onclick="exportPDF()" style="background: var(--primary)">导出PDF</button>
         <button class="danger-btn" onclick="exportExcel()" style="background: var(--warning)">导出Excel</button>
     </div>
 
     <div class="month-tabs" id="monthTabs"></div>
     <div id="tablesContainer"></div>
+    <div id="customScheduleContainer" style="margin-top: 20px;"></div>
     
     <div class="log-panel">
         <div class="log-header">
             <h3>操作记录</h3>
             <select id="logFilter" class="log-filter">
                 <option value="all">全部记录</option>
-                <option value="→ rest">休息变更</option>
-                <option value="→ leave">休假变更</option>
+                <option value="→ 休">休息变更</option>
+                <option value="→ 假">休假变更</option>
                 <option value="删除人员">删除记录</option>
             </select>
             <button class="danger-btn" onclick="resetSchedule()">重置排班</button>
@@ -242,112 +235,154 @@
     </div>
 
 <script>
+function getDateStr(date) {
+    return new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
+        .toISOString()
+        .split('T')[0];
+}
+
 const state = {
+    year: parseInt(localStorage.getItem('year')) || new Date().getFullYear(),
     staff: JSON.parse(localStorage.getItem('staff')) || ['董彦普', '张昭', '孙新'],
     schedule: JSON.parse(localStorage.getItem('schedule')) || {},
     logs: JSON.parse(localStorage.getItem('logs')) || [],
-    activeMonth: localStorage.getItem('activeMonth') || '2025-05'
+    activeMonth: localStorage.getItem('activeMonth') || getDateStr(new Date()).substring(0,7)
 };
 
 function initSystem() {
+    // 强制重置为当前年月
+    const current = new Date();
+    state.year = current.getFullYear();
+    state.activeMonth = `${state.year}-${(current.getMonth()+1).toString().padStart(2,'0')}`;
+    
+    // 初始化界面
+    initYearSelector();
     generateMonthTabs();
     renderAllTables();
-    activateTab(state.activeMonth);
-    refreshLogs();
     
-    document.getElementById('logFilter').addEventListener('change', () => refreshLogs());
+    // 强制激活当前月份选项卡
+    activateTab(state.activeMonth);
+    
+    document.getElementById('logFilter').addEventListener('change', refreshLogs);
     document.addEventListener('input', handleNameEdit);
+    setupDefaultDates();
 }
 
-function handleNameEdit(e) {
-    if (e.target.classList.contains('editable-name')) {
-        const staffIndex = e.target.getAttribute('data-staff-index');
-        const newName = e.target.textContent.trim();
-        if (newName) {
-            state.staff[staffIndex] = newName;
-            localStorage.setItem('staff', JSON.stringify(state.staff));
-        }
+function setupDefaultDates() {
+    const today = new Date();
+    const start = new Date(today.getFullYear(), today.getMonth(), 1);
+    const end = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+    
+    document.getElementById('startDate').value = getDateStr(start);
+    document.getElementById('endDate').value = getDateStr(end);
+}
+
+function initYearSelector() {
+    const yearSelect = document.getElementById('yearSelect');
+    const currentYear = new Date().getFullYear();
+    for (let y = currentYear - 2; y <= currentYear + 2; y++) {
+        const option = document.createElement('option');
+        option.value = y;
+        option.text = y + "年";
+        yearSelect.appendChild(option);
+    }
+    yearSelect.value = state.year;
+    document.getElementById('currentYear').textContent = state.year;
+    yearSelect.addEventListener('change', () => changeYear(yearSelect.value));
+}
+
+function changeYear(selectedYear) {
+    state.year = parseInt(selectedYear);
+    localStorage.setItem('year', state.year);
+    document.getElementById('currentYear').textContent = state.year;
+    generateMonthTabs();
+    renderAllTables();
+    
+    // 自动跳转逻辑
+    const currentYear = new Date().getFullYear();
+    if (state.year === currentYear) {
+        const currentMonth = new Date().getMonth() + 1;
+        activateTab(`${state.year}-${String(currentMonth).padStart(2, '0')}`);
+    } else {
+        activateTab(`${state.year}-01`);
     }
 }
 
 function generateMonthTabs() {
-    const months = [];
-    for (let m = 4; m <= 11; m++) {
-        const monthStr = `2025-${String(m+1).padStart(2, '0')}`;
-        months.push(`
+    const tabs = [];
+    for (let m = 0; m < 12; m++) {
+        const month = `${state.year}-${String(m + 1).padStart(2, '0')}`;
+        tabs.push(`
             <button class="tab-button" 
-                    data-month="${monthStr}"
-                    onclick="activateTab('${monthStr}')">
-                ${new Date(2025, m).toLocaleDateString('zh-CN', { month: 'long' })}
+                data-month="${month}"
+                onclick="activateTab('${month}')">
+                ${new Date(state.year, m).toLocaleDateString('zh-CN', { month: 'long' })}
             </button>
         `);
     }
-    document.getElementById('monthTabs').innerHTML = months.join('');
+    document.getElementById('monthTabs').innerHTML = tabs.join('');
 }
 
 function activateTab(month) {
     document.querySelectorAll('.tab-button').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.month === month);
     });
-    
     document.querySelectorAll('.month-table').forEach(table => {
         table.style.display = table.dataset.month === month ? 'block' : 'none';
     });
-    
     state.activeMonth = month;
     localStorage.setItem('activeMonth', month);
 }
 
 function renderAllTables() {
     const container = document.getElementById('tablesContainer');
-    let tablesHTML = '';
-    
-    for (let m = 4; m <= 11; m++) {
-        const monthStr = `2025-${String(m+1).padStart(2, '0')}`;
-        tablesHTML += `
+    let html = '';
+    for (let m = 0; m < 12; m++) {
+        const month = `${state.year}-${String(m + 1).padStart(2, '0')}`;
+        html += `
             <div class="table-container month-table" 
-                 data-month="${monthStr}" 
+                 data-month="${month}" 
                  style="display: none">
                 ${generateMonthTable(m)}
             </div>`;
     }
-    
-    container.innerHTML = tablesHTML;
+    container.innerHTML = html;
 }
 
-function generateMonthTable(month) {
-    const start = new Date(Date.UTC(2025, month, 1));
-    const end = new Date(Date.UTC(2025, month + 1, 0));
-    
+function generateMonthTable(monthIndex) {
+    const start = new Date(state.year, monthIndex, 1);
+    const end = new Date(state.year, monthIndex + 1, 0);
+    const today = new Date();
+    const isCurrentMonth = today.getFullYear() === state.year && today.getMonth() === monthIndex;
+
     let html = `<table class="dense-table"><thead><tr><th class="fixed-column">人员</th>`;
     
-    for (let d = new Date(start); d <= end; d.setUTCDate(d.getUTCDate() + 1)) {
-        html += `<th class="date-header">
-            <div>${d.getUTCDate()}</div>
-            <div style="font-size:12px;color:#666">周${'日一二三四五六'[d.getUTCDay()]}</div>
+    for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+        const dateStr = getDateStr(d);
+        const isToday = isCurrentMonth && dateStr === getDateStr(today);
+        html += `<th class="date-header ${isToday ? 'current-day' : ''}">
+            <div>${d.getMonth() + 1}/${d.getDate()}</div>
+            <div style="font-size:12px;color:#666">周${'日一二三四五六'[d.getDay()]}</div>
         </th>`;
     }
-    
     html += `</tr></thead><tbody>`;
-    
-    state.staff.forEach((person, staffIndex) => {
-        html += `
-        <tr><td class="fixed-column">
+
+    state.staff.forEach((person, index) => {
+        html += `<tr><td class="fixed-column">
             <div class="name-container">
-                <span class="editable-name" 
-                      contenteditable="true" 
-                      data-staff-index="${staffIndex}">${person}</span>
-                <button class="delete-staff-btn" onclick="deleteStaff(${staffIndex})">×</button>
+                <span class="editable-name" contenteditable data-staff-index="${index}">${person}</span>
+                <button class="delete-staff-btn" onclick="deleteStaff(${index})">×</button>
             </div>
         </td>`;
-        for (let d = new Date(start); d <= end; d.setUTCDate(d.getUTCDate() + 1)) {
-            const dateStr = d.toISOString().split('T')[0];
-            const status = getCurrentStatus(dateStr, staffIndex);
+        for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+            const dateStr = getDateStr(d);
+            const isToday = isCurrentMonth && dateStr === getDateStr(today);
+            const status = getCurrentStatus(dateStr, index);
             html += `
-            <td class="status-cell" 
+            <td class="status-cell ${isToday ? 'current-day' : ''}" 
                 data-date="${dateStr}"
-                data-staff="${staffIndex}"
-                onclick="handleStatusClick('${dateStr}', ${staffIndex})">
+                data-staff="${index}"
+                onclick="handleStatusClick('${dateStr}', ${index})">
                 <div class="status-dot ${status}">${getStatusText(status)}</div>
             </td>`;
         }
@@ -359,132 +394,105 @@ function generateMonthTable(month) {
         <td class="fixed-column">
             <button class="add-staff-btn" onclick="addStaff()">＋ 添加人员</button>
         </td>
-        ${'<td></td>'.repeat((end - start)/86400000 + 1)}
-    </tr>`;
-
-    return html + `</tbody></table>`;
+        ${Array((end.getDate() - start.getDate() + 1)).fill('<td></td>').join('')}
+    </tr></tbody></table>`;
+    return html;
 }
 
-function deleteStaff(staffIndex) {
-    if (!confirm(`确定要删除人员 "${state.staff[staffIndex]}" 吗？此操作不可恢复！`)) return;
-    
-    // 清理相关排班数据
-    Object.keys(state.schedule).forEach(date => {
-        if (state.schedule[date][staffIndex]) {
-            delete state.schedule[date][staffIndex];
-            if (Object.keys(state.schedule[date]).length === 0) {
-                delete state.schedule[date];
-            }
+// 保留原有功能函数（deleteStaff, addStaff, handleStatusClick等）...
+// 此处省略部分保持原有功能的函数，实际使用时需保留完整
+
+window.addEventListener('load', initSystem);
+</script>
+
+<!-- 保留原有功能函数（剩余JavaScript代码） -->
+<script>
+function handleNameEdit(e) {
+    if (e.target.classList.contains('editable-name')) {
+        const index = e.target.dataset.staffIndex;
+        const newName = e.target.textContent.trim();
+        if (newName && !state.staff.includes(newName)) {
+            state.staff[index] = newName;
+            saveState();
         }
+    }
+}
+
+function deleteStaff(index) {
+    if (!confirm(`确定删除 ${state.staff[index]} 吗？`)) return;
+    state.staff.splice(index, 1);
+    Object.keys(state.schedule).forEach(date => {
+        delete state.schedule[date][index];
+        if (Object.keys(state.schedule[date]).length === 0) delete state.schedule[date];
     });
-    
-    // 记录操作日志
-    addLogEntry({
-        timestamp: new Date().toLocaleString(),
-        action: `删除人员：${state.staff[staffIndex]}`
-    });
-    
-    state.staff.splice(staffIndex, 1);
+    addLogEntry(`删除人员：${state.staff[index]}`);
     saveState();
     renderAllTables();
-    activateTab(state.activeMonth);
 }
 
 function addStaff() {
-    const newName = prompt('请输入新人员姓名：', '新人员');
-    if (!newName) return;
-    
-    const trimmedName = newName.trim();
-    if (!trimmedName) {
-        alert('姓名不能为空');
-        return;
-    }
-    
-    if (state.staff.includes(trimmedName)) {
-        alert('该人员已存在');
-        return;
-    }
-    
-    state.staff.push(trimmedName);
+    const name = prompt('请输入新员工姓名：', '新员工');
+    if (!name || state.staff.includes(name)) return;
+    state.staff.push(name);
     saveState();
     renderAllTables();
-    activateTab(state.activeMonth);
 }
 
-function getCurrentStatus(dateStr, staffIndex) {
-    if (state.schedule[dateStr]?.[staffIndex]) {
-        return state.schedule[dateStr][staffIndex];
-    }
-    const baseDay = Math.floor((new Date(dateStr) - new Date('2025-05-16')) / 86400000);
-    return (baseDay - staffIndex) % 3 === 2 ? 'rest' : 'work';
-}
-
-function handleStatusClick(dateStr, staffIndex) {
-    const currentStatus = getCurrentStatus(dateStr, staffIndex);
-    const newStatus = getNextStatus(currentStatus);
-    const oldStatus = currentStatus;
+function handleStatusClick(dateStr, index) {
+    const statusOrder = ['班', '休', '假'];
+    const current = getCurrentStatus(dateStr, index);
+    const next = statusOrder[(statusOrder.indexOf(current) + 1) % 3];
     
     if (!state.schedule[dateStr]) state.schedule[dateStr] = {};
-    state.schedule[dateStr][staffIndex] = newStatus !== 'work' ? newStatus : undefined;
+    state.schedule[dateStr][index] = next === '班' ? undefined : next;
     
-    if (state.schedule[dateStr][staffIndex] === undefined) {
-        delete state.schedule[dateStr][staffIndex];
-        if (Object.keys(state.schedule[dateStr]).length === 0) {
-            delete state.schedule[dateStr];
-        }
+    if (state.schedule[dateStr][index] === undefined) {
+        delete state.schedule[dateStr][index];
+        if (Object.keys(state.schedule[dateStr]).length === 0) delete state.schedule[dateStr];
     }
     
-    updateStatusCell(dateStr, staffIndex);
-    addLogEntry({
-        timestamp: new Date().toLocaleString(),
-        action: `${state.staff[staffIndex]} ${dateStr} 状态变更：${oldStatus} → ${newStatus}`
-    });
-    
+    updateStatusCell(dateStr, index);
+    addLogEntry(`${state.staff[index]} ${dateStr} 状态变更：${current} → ${next}`);
     saveState();
 }
 
-function getNextStatus(current) {
-    const statusOrder = ['work', 'rest', 'leave'];
-    return statusOrder[(statusOrder.indexOf(current) + 1) % 3];
+function getCurrentStatus(date, index) {
+    return state.schedule[date]?.[index] || '班';
 }
 
 function getStatusText(status) {
-    return { work: '班', rest: '休', leave: '假' }[status];
+    return { 班: '班', 休: '休', 假: '假' }[status];
 }
 
-function updateStatusCell(dateStr, staffIndex) {
-    document.querySelectorAll(`[data-date="${dateStr}"][data-staff="${staffIndex}"] .status-dot`)
-        .forEach(cell => {
-            const status = getCurrentStatus(dateStr, staffIndex);
-            cell.className = `status-dot ${status}`;
-            cell.textContent = getStatusText(status);
-        });
+function updateStatusCell(dateStr, index) {
+    document.querySelectorAll(`[data-date="${dateStr}"][data-staff="${index}"] .status-dot`).forEach(cell => {
+        const status = getCurrentStatus(dateStr, index);
+        cell.className = `status-dot ${status}`;
+        cell.textContent = getStatusText(status);
+    });
 }
 
-function addLogEntry(logEntry) {
-    state.logs.unshift(logEntry);
+function addLogEntry(message) {
+    state.logs.unshift({ timestamp: new Date().toLocaleString(), action: message });
     if (state.logs.length > 100) state.logs.pop();
     refreshLogs();
 }
 
 function refreshLogs() {
     const filter = document.getElementById('logFilter').value;
-    const filtered = filter === 'all' ? 
-        state.logs : 
-        state.logs.filter(log => {
-            if (filter === '→ rest') return log.action.includes('→ rest');
-            if (filter === '→ leave') return log.action.includes('→ leave');
-            if (filter === '删除人员') return log.action.startsWith('删除人员');
-            return true;
-        });
-    
+    const filtered = state.logs.filter(log => {
+        if (filter === '→ 休') return log.action.includes('→ 休');
+        if (filter === '→ 假') return log.action.includes('→ 假');
+        if (filter === '删除人员') return log.action.startsWith('删除人员');
+        return true;
+    });
     document.getElementById('logEntries').innerHTML = filtered
         .map(log => `<div class="log-entry">[${log.timestamp}] ${log.action}</div>`)
         .join('');
 }
 
 function clearLogs() {
-    if (confirm('确定要清除所有操作记录吗？')) {
+    if (confirm('确认清除所有日志？')) {
         state.logs = [];
         saveState();
         refreshLogs();
@@ -492,104 +500,120 @@ function clearLogs() {
 }
 
 function resetSchedule() {
-    if (confirm('确定要重置所有排班数据吗？此操作不可恢复！')) {
+    if (confirm('确认重置所有排班数据？')) {
         state.schedule = {};
-        localStorage.removeItem('schedule');
-        renderAllTables();
-        activateTab(state.activeMonth);
         saveState();
+        renderAllTables();
     }
 }
 
-async function exportPDF() {
+function exportPDF() {
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF();
-    pdf.setFont('STSong-Light');
-
     const start = new Date(document.getElementById('startDate').value);
     const end = new Date(document.getElementById('endDate').value);
     
-    const data = state.staff.map(staff => {
-        const row = { name: staff };
-        for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-            const dateStr = d.toISOString().split('T')[0];
-            const staffIndex = state.staff.indexOf(staff);
-            row[dateStr] = getStatusText(getCurrentStatus(dateStr, staffIndex));
-        }
-        return row;
-    });
-
     const headers = ['姓名', ...Array.from({length: (end - start)/86400000 + 1}, (_,i) => {
         const d = new Date(start.getTime() + i*86400000);
         return `${d.getMonth()+1}/${d.getDate()}`;
     })];
-
-    const rows = data.map(row => [
-        row.name,
+    
+    const data = state.staff.map((name, index) => [
+        name,
         ...Array.from({length: (end - start)/86400000 + 1}, (_,i) => {
-            const d = new Date(start.getTime() + i*86400000);
-            return row[d.toISOString().split('T')[0]];
+            const dateStr = getDateStr(new Date(start.getTime() + i*86400000));
+            return getStatusText(getCurrentStatus(dateStr, index));
         })
     ]);
-
+    
     pdf.autoTable({
         head: [headers],
-        body: rows,
+        body: data,
         theme: 'grid',
-        styles: { 
-            font: 'STSong-Light',
-            fontSize: 10
-        },
-        headerStyles: { 
-            fillColor: [59, 130, 246],
-            font: 'STSong-Light'
-        },
-        bodyStyles: {
-            font: 'STSong-Light'
-        },
-        columnStyles: { 
-            0: { cellWidth: 20 } 
-        }
+        styles: { fontSize: 10 },
+        headerStyles: { fillColor: [59, 130, 246] }
     });
-
-    pdf.save(`排班表_${start.toISOString().slice(0,10)}_${end.toISOString().slice(0,10)}.pdf`);
+    
+    pdf.save(`排班表_${getDateStr(start)}_${getDateStr(end)}.pdf`);
 }
 
 function exportExcel() {
     const start = new Date(document.getElementById('startDate').value);
     const end = new Date(document.getElementById('endDate').value);
     
-    const data = [];
-    const header = ['姓名'];
-    for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-        const dateStr = d.toISOString().split('T')[0];
-        header.push(dateStr);
-    }
-    data.push(header);
+    const data = [
+        ['姓名', ...Array.from({length: (end - start)/86400000 + 1}, (_,i) => {
+            const d = new Date(start.getTime() + i*86400000);
+            return `${d.getMonth()+1}/${d.getDate()}`;
+        })]
+    ];
     
-    state.staff.forEach((staff, index) => {
-        const row = [staff];
-        for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-            const dateStr = d.toISOString().split('T')[0];
-            const status = getStatusText(getCurrentStatus(dateStr, index));
-            row.push(status);
-        }
-        data.push(row);
+    state.staff.forEach((name, index) => {
+        data.push([
+            name,
+            ...Array.from({length: (end - start)/86400000 + 1}, (_,i) => {
+                const dateStr = getDateStr(new Date(start.getTime() + i*86400000));
+                return getStatusText(getCurrentStatus(dateStr, index));
+            })
+        ]);
     });
     
     const ws = XLSX.utils.aoa_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "排班表");
-    XLSX.writeFile(wb, `排班表_${start.toISOString().split('T')[0]}_${end.toISOString().split('T')[0]}.xlsx`);
+    XLSX.writeFile(wb, `排班表_${getDateStr(start)}_${getDateStr(end)}.xlsx`);
 }
 
 function saveState() {
+    localStorage.setItem('year', state.year);
     localStorage.setItem('staff', JSON.stringify(state.staff));
     localStorage.setItem('schedule', JSON.stringify(state.schedule));
     localStorage.setItem('logs', JSON.stringify(state.logs));
 }
 
-window.addEventListener('load', initSystem);
+function showCustomSchedule() {
+    const start = new Date(document.getElementById('startDate').value);
+    const end = new Date(document.getElementById('endDate').value);
+    if (start > end) return alert("开始日期不能晚于结束日期");
+    document.getElementById('customScheduleContainer').innerHTML = generateCustomSchedule(start, end);
+}
+
+function generateCustomSchedule(start, end) {
+    let html = `<div class="table-container"><table class="dense-table"><thead><tr><th class="fixed-column">人员</th>`;
+    for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+        html += `<th class="date-header">
+            <div>${d.getMonth() + 1}/${d.getDate()}</div>
+            <div style="font-size:12px;color:#666">周${'日一二三四五六'[d.getDay()]}</div>
+        </th>`;
+    }
+    html += `</tr></thead><tbody>`;
+
+    state.staff.forEach((person, index) => {
+        html += `<tr><td class="fixed-column">
+            <div class="name-container">
+                <span class="editable-name" contenteditable data-staff-index="${index}">${person}</span>
+                <button class="delete-staff-btn" onclick="deleteStaff(${index})">×</button>
+            </div>
+        </td>`;
+        for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+            const dateStr = getDateStr(d);
+            const status = getCurrentStatus(dateStr, index);
+            html += `
+            <td class="status-cell" 
+                data-date="${dateStr}"
+                data-staff="${index}"
+                onclick="handleStatusClick('${dateStr}', ${index})">
+                <div class="status-dot ${status}">${getStatusText(status)}</div>
+            </td>`;
+        }
+        html += `</tr>`;
+    });
+    return html + `</tbody></table></div>`;
+}
+
+function hideCustomSchedule() {
+    document.getElementById('customScheduleContainer').innerHTML = '';
+}
 </script>
 </body>
 </html>
