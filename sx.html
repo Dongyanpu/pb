@@ -186,24 +186,19 @@
             opacity: 0.9;
         }
 
-
-
-        /* 新增当前日期高亮样式 */
         .current-day {
             background-color: #00f0f1 !important;
             border: 1px solid #0fffff !important;
         }
     </style>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
     <h2>
         <span id="currentYear"></span>年绍兴售后排班管理
         <select id="yearSelect" class="log-filter" style="margin-left: 15px;"></select>
     </h2>
-    <div class="alert-banner">
-
-    </div>
+    <div class="alert-banner"></div>
     
     <div class="export-panel">
         <input type="date" id="startDate" class="log-filter">
@@ -211,7 +206,6 @@
         <input type="date" id="endDate" class="log-filter">
         <button class="danger-btn" onclick="showCustomSchedule()" style="background: var(--primary)">查看排班</button>
         <button class="danger-btn" onclick="hideCustomSchedule()" style="background: var(--danger)">取消查看</button>
-        <button class="danger-btn" onclick="exportPDF()" style="background: var(--primary)">导出PDF</button>
         <button class="danger-btn" onclick="exportExcel()" style="background: var(--warning)">导出Excel</button>
     </div>
 
@@ -250,17 +244,14 @@ const state = {
 };
 
 function initSystem() {
-    // 强制重置为当前年月
     const current = new Date();
     state.year = current.getFullYear();
     state.activeMonth = `${state.year}-${(current.getMonth()+1).toString().padStart(2,'0')}`;
     
-    // 初始化界面
     initYearSelector();
     generateMonthTabs();
     renderAllTables();
     
-    // 强制激活当前月份选项卡
     activateTab(state.activeMonth);
     
     document.getElementById('logFilter').addEventListener('change', refreshLogs);
@@ -298,7 +289,6 @@ function changeYear(selectedYear) {
     generateMonthTabs();
     renderAllTables();
     
-    // 自动跳转逻辑
     const currentYear = new Date().getFullYear();
     if (state.year === currentYear) {
         const currentMonth = new Date().getMonth() + 1;
@@ -399,14 +389,6 @@ function generateMonthTable(monthIndex) {
     return html;
 }
 
-// 保留原有功能函数（deleteStaff, addStaff, handleStatusClick等）...
-// 此处省略部分保持原有功能的函数，实际使用时需保留完整
-
-window.addEventListener('load', initSystem);
-</script>
-
-<!-- 保留原有功能函数（剩余JavaScript代码） -->
-<script>
 function handleNameEdit(e) {
     if (e.target.classList.contains('editable-name')) {
         const index = e.target.dataset.staffIndex;
@@ -507,57 +489,38 @@ function resetSchedule() {
     }
 }
 
-function exportPDF() {
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF();
-    const start = new Date(document.getElementById('startDate').value);
-    const end = new Date(document.getElementById('endDate').value);
+function exportExcel() {
+    const startInput = document.getElementById('startDate').value;
+    const endInput = document.getElementById('endDate').value;
     
-    const headers = ['姓名', ...Array.from({length: (end - start)/86400000 + 1}, (_,i) => {
+    if (!startInput || !endInput) {
+        alert("请先选择日期范围");
+        return;
+    }
+    
+    const start = new Date(startInput);
+    const end = new Date(endInput);
+    if (start > end) {
+        alert("开始日期不能晚于结束日期");
+        return;
+    }
+
+    const dateCount = Math.floor((end - start) / 86400000) + 1;
+    const headers = ['姓名', ...Array.from({length: dateCount}, (_,i) => {
         const d = new Date(start.getTime() + i*86400000);
         return `${d.getMonth()+1}/${d.getDate()}`;
     })];
     
-    const data = state.staff.map((name, index) => [
-        name,
-        ...Array.from({length: (end - start)/86400000 + 1}, (_,i) => {
-            const dateStr = getDateStr(new Date(start.getTime() + i*86400000));
-            return getStatusText(getCurrentStatus(dateStr, index));
-        })
-    ]);
-    
-    pdf.autoTable({
-        head: [headers],
-        body: data,
-        theme: 'grid',
-        styles: { fontSize: 10 },
-        headerStyles: { fillColor: [59, 130, 246] }
-    });
-    
-    pdf.save(`排班表_${getDateStr(start)}_${getDateStr(end)}.pdf`);
-}
-
-function exportExcel() {
-    const start = new Date(document.getElementById('startDate').value);
-    const end = new Date(document.getElementById('endDate').value);
-    
-    const data = [
-        ['姓名', ...Array.from({length: (end - start)/86400000 + 1}, (_,i) => {
-            const d = new Date(start.getTime() + i*86400000);
-            return `${d.getMonth()+1}/${d.getDate()}`;
-        })]
-    ];
-    
+    const data = [headers];
     state.staff.forEach((name, index) => {
-        data.push([
-            name,
-            ...Array.from({length: (end - start)/86400000 + 1}, (_,i) => {
-                const dateStr = getDateStr(new Date(start.getTime() + i*86400000));
-                return getStatusText(getCurrentStatus(dateStr, index));
-            })
-        ]);
+        const row = [name];
+        for (let i = 0; i < dateCount; i++) {
+            const dateStr = getDateStr(new Date(start.getTime() + i*86400000));
+            row.push(getStatusText(getCurrentStatus(dateStr, index)));
+        }
+        data.push(row);
     });
-    
+
     const ws = XLSX.utils.aoa_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "排班表");
@@ -614,6 +577,8 @@ function generateCustomSchedule(start, end) {
 function hideCustomSchedule() {
     document.getElementById('customScheduleContainer').innerHTML = '';
 }
+
+window.addEventListener('load', initSystem);
 </script>
 </body>
 </html>
