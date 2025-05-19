@@ -110,16 +110,17 @@
     display: flex;
     gap: 24px;
     padding: 12px 16px;
-    margin: -8px 0 12px;
+    margin: 20px 0 12px;  /* 将原来的负边距改为正边距 */
+    position: relative;   /* 确保定位上下文正确 */
+    z-index: 1;     
     background: #f8f9fa;
     border-radius: 8px;
     border: 1px solid #eee;
     flex-wrap: wrap;
     color: #666;
     padding: 1 8px 8px;
-    font-size: 12px;
+   font-size: 12px;
 }
-
 /* 保持与表格中的颜色一致 */
 .status-icon {
     width: 24px;  /* 增大尺寸 */
