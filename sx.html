@@ -29,10 +29,11 @@
         body {
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 15px;
             background: linear-gradient(135deg, #f0f9ff 0%, #e6f7ff 100%);
             color: var(--text);
             min-height: 100vh;
+            font-size: 16px;
         }
 
         .container {
@@ -48,10 +49,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 30px;
+            padding: 15px 20px;
             background: linear-gradient(120deg, #1e3a8a 0%, var(--primary) 100%);
             color: white;
             position: relative;
+            flex-wrap: wrap;
         }
 
         .header::after {
@@ -68,39 +70,40 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
+            margin-bottom: 10px;
         }
 
         .system-title h1 {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 700;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
 
         .system-title h1 i {
             background: rgba(255, 255, 255, 0.2);
-            width: 50px;
-            height: 50px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 20px;
         }
 
         .year-selector {
             display: flex;
             align-items: center;
-            gap: 15px;
-            margin-top: 8px;
+            gap: 10px;
+            margin-top: 5px;
         }
 
         .year-selector label {
             font-weight: 500;
-            font-size: 16px;
+            font-size: 14px;
             background: rgba(255,255,255,0.1);
-            padding: 5px 10px;
+            padding: 4px 8px;
             border-radius: 5px;
         }
 
@@ -108,10 +111,10 @@
             background: rgba(255, 255, 255, 0.15);
             border: 2px solid rgba(255, 255, 255, 0.3);
             border-radius: 8px;
-            padding: 8px 15px;
+            padding: 6px 12px;
             color: white;
             font-weight: 500;
-            font-size: 16px;
+            font-size: 14px;
             cursor: pointer;
             transition: all 0.3s;
         }
@@ -128,31 +131,33 @@
         .system-info {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 8px;
             background: rgba(255, 255, 255, 0.15);
-            padding: 15px 20px;
+            padding: 12px 15px;
             border-radius: 12px;
             backdrop-filter: blur(5px);
-            min-width: 220px;
+            min-width: 200px;
+            width: 100%;
+            max-width: 300px;
         }
 
         .info-item {
             display: flex;
             justify-content: space-between;
-            font-size: 16px;
+            font-size: 14px;
         }
 
         .info-value {
             font-weight: 600;
             background: rgba(255, 255, 255, 0.2);
-            padding: 2px 10px;
+            padding: 2px 8px;
             border-radius: 20px;
-            min-width: 50px;
+            min-width: 40px;
             text-align: center;
         }
 
         .content {
-            padding: 25px;
+            padding: 15px;
         }
 
         .control-panel {
@@ -160,18 +165,18 @@
             flex-wrap: wrap;
             gap: 15px;
             background: var(--light-bg);
-            padding: 20px;
+            padding: 15px;
             border-radius: 12px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.03);
         }
 
         .panel-section {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
             flex: 1;
-            min-width: 250px;
+            min-width: 200px;
         }
 
         .panel-title {
@@ -179,35 +184,38 @@
             color: var(--primary-dark);
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 16px;
+            gap: 6px;
+            font-size: 15px;
         }
 
         .date-range {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             background: white;
-            padding: 10px 15px;
+            padding: 8px 12px;
             border-radius: 8px;
             border: 1px solid var(--border);
+            flex-wrap: wrap;
         }
 
         .date-range input {
             border: 1px solid var(--border);
             border-radius: 6px;
-            padding: 8px 12px;
+            padding: 8px;
             font-size: 14px;
+            width: 100%;
+            max-width: 150px;
         }
 
         .btn-group {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             flex-wrap: wrap;
         }
 
         .btn {
-            padding: 10px 20px;
+            padding: 10px 16px;
             border: none;
             border-radius: 8px;
             cursor: pointer;
@@ -215,8 +223,9 @@
             font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             font-size: 14px;
+            min-height: 42px;
         }
 
         .btn i {
@@ -269,10 +278,10 @@
 
         .month-tabs {
             display: flex;
-            gap: 5px;
+            gap: 4px;
             overflow-x: auto;
-            padding: 10px 0;
-            margin-bottom: 20px;
+            padding: 8px 0;
+            margin-bottom: 15px;
             scrollbar-width: thin;
         }
 
@@ -283,7 +292,7 @@
         .month-tabs::-webkit-scrollbar-track {
             background: #f1f1f1;
             border-radius: 10px;
-}
+        }
 
         .month-tabs::-webkit-scrollbar-thumb {
             background: #c1c1c1;
@@ -291,15 +300,16 @@
         }
 
         .tab-button {
-            padding: 10px 20px;
+            padding: 8px 15px;
             border: none;
             border-radius: 8px;
             background: #e2e8f0;
             cursor: pointer;
             transition: all 0.3s;
             font-weight: 500;
-            min-width: 100px;
+            min-width: 90px;
             text-align: center;
+            font-size: 14px;
         }
 
         .tab-button:hover {
@@ -313,13 +323,14 @@
         }
 
         .table-container {
-            margin-top: 15px;
+            margin-top: 10px;
             overflow-x: auto;
             border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 15px;
+            padding: 10px;
             background: white;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.03);
+            max-width: 100%;
         }
 
         .dense-table {
@@ -341,14 +352,14 @@
             background: white;
             z-index: 2;
             box-shadow: 2px 0 3px rgba(0, 0, 0, 0.05);
-            min-width: 160px;
-            padding: 12px 15px;
+            min-width: 140px;
+            padding: 10px 12px;
             font-weight: 500;
         }
 
         .date-header {
-            min-width: 45px;
-            padding: 10px 5px;
+            min-width: 40px;
+            padding: 8px 4px;
             background: #f8f9fa;
             border: 1px solid #eee;
             text-align: center;
@@ -356,12 +367,12 @@
         }
 
         .status-cell {
-            min-width: 45px;
+            min-width: 40px;
             padding: 0;
             border: 1px solid #eee;
             cursor: pointer;
             text-align: center;
-            height: 45px;
+            height: 40px;
         }
 
         .status-dot {
@@ -383,9 +394,9 @@
 
         .status-notes {
             display: flex;
-            gap: 30px;
-            padding: 18px 25px;
-            margin: 30px 0 20px;
+            gap: 20px;
+            padding: 15px 20px;
+            margin: 20px 0 15px;
             background: #f8f9fa;
             border-radius: 12px;
             border: 1px solid #eee;
@@ -397,17 +408,17 @@
         .status-note-item {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .status-icon {
-            width: 32px;
-            height: 32px;
+            width: 28px;
+            height: 28px;
             border-radius: 6px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 600;
         }
 
@@ -438,8 +449,8 @@
         }
 
         .log-panel {
-            margin-top: 30px;
-            padding: 25px;
+            margin-top: 20px;
+            padding: 20px;
             background: #f8f9fa;
             border-radius: 12px;
             border: 1px solid #eee;
@@ -447,38 +458,38 @@
 
         .log-header {
             display: flex;
-            gap: 15px;
+            gap: 12px;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             flex-wrap: wrap;
         }
 
         .log-header h3 {
-            font-size: 20px;
+            font-size: 18px;
             color: var(--primary-dark);
         }
 
         .log-filter {
-            padding: 8px 15px;
+            padding: 8px 12px;
             border: 1px solid var(--border);
             border-radius: 8px;
             background: white;
             font-size: 14px;
-            min-width: 150px;
+            min-width: 130px;
         }
 
         .log-container {
-            max-height: 300px;
+            max-height: 250px;
             overflow-y: auto;
-            padding-right: 10px;
+            padding-right: 8px;
             background: white;
             border-radius: 8px;
-            padding: 15px;
+            padding: 12px;
             border: 1px solid var(--border);
         }
 
         .log-container::-webkit-scrollbar {
-            width: 8px;
+            width: 6px;
         }
 
         .log-container::-webkit-scrollbar-track {
@@ -492,11 +503,11 @@
         }
 
         .log-entry {
-            padding: 10px 15px;
+            padding: 8px 12px;
             border-bottom: 1px solid #eee;
             font-size: 14px;
             display: flex;
-            gap: 10px;
+            gap: 8px;
         }
 
         .log-entry:last-child {
@@ -506,7 +517,7 @@
         .log-time {
             color: var(--text-light);
             font-size: 12px;
-            min-width: 70px;
+            min-width: 60px;
         }
 
         .log-message {
@@ -533,8 +544,8 @@
             background: var(--primary);
             color: white;
             font-size: 10px;
-            width: 16px;
-            height: 16px;
+            width: 14px;
+            height: 14px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -544,7 +555,7 @@
         .name-container {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         .delete-staff-btn {
@@ -552,14 +563,14 @@
             color: white;
             border: none;
             border-radius: 50%;
-            width: 24px;
-            height: 24px;
+            width: 22px;
+            height: 22px;
             cursor: pointer;
             transition: all 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
+            font-size: 12px;
         }
 
         .delete-staff-btn:hover {
@@ -569,10 +580,11 @@
 
         .editable-name {
             outline: none;
-            padding: 5px 8px;
+            padding: 4px 6px;
             border-radius: 6px;
             transition: all 0.3s;
-            min-width: 100px;
+            min-width: 90px;
+            font-size: 14px;
         }
 
         .editable-name:focus {
@@ -585,13 +597,14 @@
             color: white;
             border: none;
             border-radius: 6px;
-            padding: 8px 15px;
+            padding: 8px 12px;
             cursor: pointer;
             transition: all 0.3s;
             font-weight: 500;
             display: flex;
             align-items: center;
             gap: 6px;
+            font-size: 14px;
         }
 
         .add-staff-btn:hover {
@@ -601,127 +614,282 @@
 
         .empty-state {
             text-align: center;
-            padding: 40px 20px;
+            padding: 30px 15px;
             color: var(--text-light);
         }
 
         .empty-state i {
-            font-size: 48px;
-            margin-bottom: 15px;
+            font-size: 40px;
+            margin-bottom: 12px;
             color: #cbd5e1;
         }
-/* 排班弹窗样式 */
-.schedule-popup {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-}
 
-.popup-content {
-    background: white;
-    border-radius: 16px;
-    width: 90%;
-    max-width: 1200px;
-    max-height: 90vh;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    animation: popupFadeIn 0.3s ease-out;
-}
+        /* 排班弹窗样式 */
+        .schedule-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 15px;
+        }
 
-@keyframes popupFadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
+        .popup-content {
+            background: white;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 1200px;
+            max-height: 90vh;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: popupFadeIn 0.3s ease-out;
+        }
 
-.popup-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-    background: linear-gradient(120deg, #1e3a8a 0%, var(--primary) 100%);
-    color: white;
-}
+        @keyframes popupFadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-.popup-header h3 {
-    font-size: 22px;
-    font-weight: 600;
-}
+        .popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: linear-gradient(120deg, #1e3a8a 0%, var(--primary) 100%);
+            color: white;
+        }
 
-.close-btn {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 28px;
-    cursor: pointer;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    transition: all 0.3s;
-}
+        .popup-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+        }
 
-.close-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
-}
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
 
-.popup-body {
-    padding: 20px;
-    overflow: auto;
-    max-height: 70vh;
-}
+        .close-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
 
-.schedule-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-}
+        .popup-body {
+            padding: 15px;
+            overflow: auto;
+            max-height: 70vh;
+        }
 
-.schedule-table th {
-    background: #f8fafc;
-    padding: 12px 8px;
-    text-align: center;
-    font-weight: 600;
-    color: var(--text-light);
-    border: 1px solid var(--border);
-}
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
 
-.schedule-table td {
-    padding: 10px 8px;
-    text-align: center;
-    border: 1px solid var(--border);
-}
+        .schedule-table th {
+            background: #f8fafc;
+            padding: 10px 6px;
+            text-align: center;
+            font-weight: 600;
+            color: var(--text-light);
+            border: 1px solid var(--border);
+        }
 
-.schedule-table .status-cell {
-    padding: 0;
-    height: 45px;
-}
+        .schedule-table td {
+            padding: 8px 6px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .schedule-table .status-cell {
+            padding: 0;
+            height: 40px;
+        }
+
+        /* 移动设备优化 */
         @media (max-width: 768px) {
+            body {
+                padding: 10px;
+                font-size: 15px;
+            }
+            
             .header {
                 flex-direction: column;
-                gap: 20px;
+                gap: 15px;
                 align-items: flex-start;
+                padding: 12px 15px;
+            }
+            
+            .system-title h1 {
+                font-size: 22px;
+            }
+            
+            .system-title h1 i {
+                width: 36px;
+                height: 36px;
+                font-size: 18px;
+            }
+            
+            .system-info {
+                min-width: 100%;
+                max-width: 100%;
             }
             
             .control-panel {
                 flex-direction: column;
+                padding: 12px;
+            }
+            
+            .panel-section {
+                min-width: 100%;
             }
             
             .btn-group {
                 flex-direction: column;
             }
             
-            .fixed-column {
-                min-width: 140px;
+            .btn {
+                width: 100%;
+                justify-content: center;
             }
+            
+            .date-range input {
+                max-width: 100%;
+            }
+            
+            .fixed-column {
+                min-width: 120px;
+                padding: 8px 10px;
+            }
+            
+            .date-header {
+                min-width: 36px;
+                font-size: 12px;
+            }
+            
+            .status-cell {
+                min-width: 36px;
+                height: 36px;
+            }
+            
+            .status-notes {
+                gap: 15px;
+                padding: 12px 15px;
+            }
+            
+            .log-panel {
+                padding: 15px;
+            }
+            
+            .log-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .log-header h3 {
+                font-size: 16px;
+            }
+            
+            .log-filter {
+                width: 100%;
+            }
+            
+            .popup-header h3 {
+                font-size: 16px;
+            }
+            
+            .popup-body {
+                padding: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .system-title h1 {
+                font-size: 20px;
+            }
+            
+            .tab-button {
+                min-width: 80px;
+                padding: 6px 12px;
+                font-size: 13px;
+            }
+            
+            .table-container {
+                padding: 8px;
+            }
+            
+            .fixed-column {
+                min-width: 110px;
+                font-size: 13px;
+            }
+            
+            .status-dot {
+                font-size: 13px;
+            }
+            
+            .status-notes {
+                gap: 12px;
+                padding: 10px 12px;
+            }
+            
+            .status-note-item {
+                font-size: 13px;
+            }
+            
+            .status-icon {
+                width: 24px;
+                height: 24px;
+                font-size: 12px;
+            }
+            
+            .log-panel {
+                padding: 12px;
+            }
+            
+            .log-container {
+                padding: 10px;
+            }
+            
+            .log-entry {
+                padding: 6px 8px;
+                font-size: 13px;
+            }
+	.current-day {
+    position: relative;
+    border: 2px solid var(--primary) !important;
+    background-color: #e6f7ff !important;
+    font-weight: bold;
+}
+
+/* 添加日期单元格的今日标记 */
+.date-header.current-day::after {
+    content: '今';
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background: var(--primary);
+    color: white;
+    font-size: 10px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
         }
     </style>
 </head>
@@ -735,6 +903,15 @@
                     <select id="yearSelect" class="log-filter"></select>
                 </div>
             </div>
+<div class="panel-section">
+    <div class="panel-title"><i class="fas fa-tools"></i> 排班操作</div>
+    <div class="btn-group">
+        <!-- 原有按钮... -->
+        <button class="btn btn-warning" onclick="goToToday()">
+            <i class="fas fa-calendar-day"></i> 返回今日
+        </button>
+    </div>
+</div>
             <div class="system-info">
                 <div class="info-item">
                     <span>当前月份：</span>
@@ -896,6 +1073,28 @@
             refreshLogs();
     
   setupDefaultDates();
+    const today = new Date();
+    const currentMonthKey = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}`;
+    
+    // 如果当前月份标签存在，则激活它
+    if (document.querySelector(`.tab-button[data-month="${currentMonthKey}"]`)) {
+        activateTab(currentMonthKey);
+        
+        // 添加日志
+        addLog(`自动跳转到当前月份: ${currentMonthKey}`);
+    }
+    
+    // 添加自动滚动到当前日期功能
+    setTimeout(() => {
+        const todayCell = document.querySelector(`.current-day`);
+        if (todayCell) {
+            todayCell.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'nearest', 
+                inline: 'center' 
+            });
+        }
+    }, 300);
 }
 function setupDefaultDates() {
     const today = new Date();
@@ -1393,10 +1592,13 @@ function setupDefaultDates() {
                         const dateStr = `${state.year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
                         let status = '班';
                         
-                        // 从状态管理中获取状态
-                        if (state.schedule[staff] && state.schedule[staff][dateStr]) {
-                            status = state.schedule[staff][dateStr];
-                        }
+
+    const today = new Date();
+    if (today.getFullYear() === state.year && 
+        today.getMonth() + 1 === month && 
+        today.getDate() === day) {
+        th.classList.add('current-day');
+    }
                         
                         row.push(status);
                     }
@@ -1538,6 +1740,28 @@ function generateScheduleTable(startDate, endDate) {
     });
     
     tableContainer.appendChild(table);
+}
+function goToToday() {
+    const today = new Date();
+    const currentMonthKey = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}`;
+    
+    // 激活当前月份标签
+    activateTab(currentMonthKey);
+    
+    // 滚动到当前日期
+    setTimeout(() => {
+        const todayCell = document.querySelector(`.current-day`);
+        if (todayCell) {
+            todayCell.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'nearest', 
+                inline: 'center' 
+            });
+        }
+    }, 300);
+    
+    // 添加日志
+    addLog(`已返回今日`);
 }
 
 // 格式化日期为 YYYY-MM-DD
