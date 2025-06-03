@@ -385,13 +385,15 @@
 
         .fixed-column {
             position: sticky;
-            left: 0;
-            background: white;
-            z-index: 2;
-            box-shadow: 2px 0 3px rgba(0, 0, 0, 0.05);
-            min-width: 140px;
-            padding: 10px 12px;
-            font-weight: 500;
+    left: 0;
+    background: white;
+    z-index: 2;
+    box-shadow: 2px 0 3px rgba(0, 0, 0, 0.05);
+    min-width: 100px; /* 缩小最小宽度 */
+    max-width: 120px; /* 添加最大宽度限制 */
+    padding: 8px 10px; /* 调整内边距 */
+    font-weight: 500;
+    text-align: left; /* 确保文本左对齐 */
         }
 
         .date-header {
@@ -404,12 +406,12 @@
         }
 
         .status-cell {
-            min-width: 40px;
-            padding: 0;
-            border: 1px solid #eee;
-            cursor: pointer;
-            text-align: center;
-            height: 40px;
+          min-width: 36px; /* 略微缩小状态单元格 */
+    padding: 0;
+    border: 1px solid #eee;
+    cursor: pointer;
+    text-align: center;
+    height: 36px; 
         }
 
         .status-dot {
@@ -590,24 +592,26 @@
         }
 
         .name-container {
-            display: flex;
-            align-items: center;
-            gap: 6px;
+         display: flex;
+    align-items: center;
+    gap: 4px; /* 缩小元素间距 */
+    width: 100%;
         }
 
         .delete-staff-btn {
-            background: var(--danger);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 22px;
-            height: 22px;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
+         background: var(--danger);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px; /* 缩小按钮尺寸 */
+    height: 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px; /* 缩小图标尺寸 */
+    flex-shrink: 0; /* 防止按钮被压缩 */
         }
 
         .delete-staff-btn:hover {
@@ -616,12 +620,16 @@
         }
 
         .editable-name {
-            outline: none;
-            padding: 4px 6px;
-            border-radius: 6px;
-            transition: all 0.3s;
-            min-width: 90px;
-            font-size: 14px;
+outline: none;
+    padding: 4px 6px;
+    border-radius: 6px;
+    transition: all 0.3s;
+    min-width: 70px; /* 缩小最小宽度 */
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis; /* 添加文本溢出省略号 */
+    white-space: nowrap; /* 防止换行 */
+    flex: 1; /* 占据剩余空间 */
         }
 
         .editable-name:focus {
@@ -816,10 +824,10 @@
                 padding: 8px 10px !important;
             }
             
-            .editable-name {
-                min-width: 70px !important;
-                font-size: 13px !important;
-                padding: 3px 5px !important;
+           .editable-name {
+        min-width: 60px !important; /* 移动端进一步缩小 */
+        font-size: 13px !important;
+        padding: 3px 4px !important;
             }
             
             .date-header, .status-cell {
@@ -832,10 +840,10 @@
                 font-size: 12px !important;
             }
             
-            .delete-staff-btn {
-                width: 20px !important;
-                height: 20px !important;
-                font-size: 10px !important;
+       .delete-staff-btn {
+        width: 18px !important;
+        height: 18px !important;
+        font-size: 9px !important;
             }
             
             /* 控制面板优化 */
@@ -872,8 +880,10 @@
                 font-size: 12px !important;
             }
             
-            .fixed-column {
-                min-width: 80px !important;
+    .fixed-column {
+        min-width: 80px !important; /* 移动端进一步缩小 */
+        padding: 6px 8px !important; /* 调整内边距 */
+        font-size: 13px !important;
             }
             
             .date-header, .status-cell {
