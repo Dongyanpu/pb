@@ -56,6 +56,43 @@
             flex-wrap: wrap;
         }
 
+  .year-selector {
+                display: flex;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-top: 5px;
+                width: 100%;
+            }
+            
+            .mobile-stats {
+                display: flex;
+                gap: 12px;
+                margin-left: auto;
+                font-size: 13px;
+                background: rgba(255,255,255,0.1);
+                padding: 4px 10px;
+                border-radius: 20px;
+            }
+            
+            .mobile-stats span {
+                display: flex;
+                align-items: center;
+                gap: 4px;
+            }
+            
+            .system-info {
+                display: none;
+            }
+            
+            .year-selector label {
+                font-size: 13px;
+            }
+            
+            #yearSelect {
+                font-size: 13px;
+                padding: 5px 10px;
+            }
         .header::after {
             content: '';
             position: absolute;
@@ -844,43 +881,6 @@
                 font-size: 16px
  !important;
             }
-  .year-selector {
-                display: flex;
-                align-items: center;
-                flex-wrap: wrap;
-                gap: 8px;
-                margin-top: 5px;
-                width: 100%;
-            }
-            
-            .mobile-stats {
-                display: flex;
-                gap: 12px;
-                margin-left: auto;
-                font-size: 13px;
-                background: rgba(255,255,255,0.1);
-                padding: 4px 10px;
-                border-radius: 20px;
-            }
-            
-            .mobile-stats span {
-                display: flex;
-                align-items: center;
-                gap: 4px;
-            }
-            
-            .system-info {
-                display: none;
-            }
-            
-            .year-selector label {
-                font-size: 13px;
-            }
-            
-            #yearSelect {
-                font-size: 13px;
-                padding: 5px 10px;
-            }
 	.current-day {
     position: relative;
     border: 2px solid var(--primary) !important;
@@ -914,6 +914,11 @@
                 <div class="year-selector">
                     <label for="yearSelect">选择年份：</label>
                     <select id="yearSelect" class="log-filter"></select>
+                    <!-- 移动端统计信息 -->
+                    <div class="mobile-stats" id="mobileStats">
+                        <span><i class="fas fa-users"></i> <span id="mobileStaffCount">3</span></span>
+                        <span><i class="fas fa-calendar-check"></i> <span id="mobileScheduleCount">0</span></span>
+                    </div>
                 </div>
             </div>
 
@@ -931,8 +936,7 @@
                     <span class="info-value" id="scheduleCount">0</span>
                 </div>
             </div>
-        </div>
-        
+        </div>        
         <div class="content">
             <div class="control-panel">
                 <div class="panel-section">
@@ -1024,7 +1028,7 @@
 
     <script>
         // 状态管理
-        const state = {
+       const state = {
             year: new Date().getFullYear(),
             staff: ['董彦普', '张昭', '孙新'],
             schedule: {},
@@ -1421,7 +1425,9 @@ function setupDefaultDates() {
         // 更新统计数据
         function updateStats() {
             // 更新员工数量
-            document.getElementById('staffCount').textContent = state.staff.length;
+ const staffCount = state.staff.length;
+            document.getElementById('staffCount').textContent = staffCount;
+            document.getElementById('mobileStaffCount').textContent = staffCount;
             
             // 计算排班记录数量
             let scheduleCount = 0;
@@ -1429,9 +1435,11 @@ function setupDefaultDates() {
                 scheduleCount += Object.keys(state.schedule[staff]).length;
             }
             document.getElementById('scheduleCount').textContent = scheduleCount;
+            document.getElementById('mobileScheduleCount').textContent = scheduleCount;
             
             localStorage.setItem('staff', JSON.stringify(state.staff));
         }
+ document.addEventListener('DOMContentLoaded', initSystem);
 
         // 添加日志
         function addLog(message) {
