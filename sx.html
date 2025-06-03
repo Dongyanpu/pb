@@ -759,7 +759,21 @@
 
      @media (max-width: 768px) {
             /* 按钮组优化 - 单行排列 */
-            .btn-group {
+             .system-info {
+        display: none !important;
+    }
+ .status-notes {
+        gap: 10px !important;
+        padding: 12px 15px !important;
+        font-size: 12px !important;
+    }
+    
+    .status-icon {
+        width: 22px !important;
+        height: 22px !important;
+        font-size: 12px !important;
+    }
+   .btn-group {
                 flex-direction: row !important;
                 overflow-x: auto;
                 padding-bottom: 5px;
@@ -819,9 +833,9 @@
             }
             
             .delete-staff-btn {
-                width: 24px !important;
-                height: 24px !important;
-                font-size: 12px !important;
+                width: 20px !important;
+                height: 20px !important;
+                font-size: 10px !important;
             }
             
             /* 控制面板优化 */
@@ -841,14 +855,10 @@
             .date-range input {
                 padding: 6px !important;
                 font-size: 13px !important;
+ max-width: 130px !important;
             }
             
-            /* 系统信息优化 */
-            .system-info {
-                padding: 10px 12px !important;
-                min-width: 100% !important;
-                max-width: 100% !important;
-            }
+
             
             .info-item {
                 font-size: 13px !important;
