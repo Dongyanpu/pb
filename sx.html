@@ -1131,53 +1131,87 @@ function setupDefaultDates() {
             }
         }
 
-        // 生成月份标签
-        function generateMonthTabs() {
-            const monthTabs = document.getElementById('monthTabs');
-            monthTabs.innerHTML = '';
+    function generateMonthTabs() {
+        const monthTabs = document.getElementById('monthTabs');
+        monthTabs.innerHTML = '';
+        
+        // 获取当前活跃月份信息
+        const [activeYear, activeMonth] = state.activeMonth.split('-').map(Number);
+        
+        // 确定要显示的月份范围
+        let monthsToShow = [];
+        if (isMobile()) {
+            // 移动端只显示当前月及前后各一个月
+            monthsToShow = [
+                {month: activeMonth - 1, year: activeYear},
+                {month: activeMonth, year: activeYear},
+                {month: activeMonth + 1, year: activeYear}
+            ];
             
+            // 处理跨年情况
+            monthsToShow = monthsToShow.map(m => {
+                if (m.month === 0) return {month: 12, year: m.year - 1};
+                if (m.month === 13) return {month: 1, year: m.year + 1};
+                return m;
+            }).filter(m => m.month >= 1 && m.month <= 12);
+        } else {
+            // 桌面端显示所有月份
             for (let month = 1; month <= 12; month++) {
-                const monthName = month < 10 ? `0${month}` : month;
-                const monthKey = `${state.year}-${monthName}`;
-                const monthLabel = `${state.year}年${month}月`;
-                
-                const tab = document.createElement('button');
-                tab.className = 'tab-button';
-                tab.textContent = monthLabel;
-                tab.dataset.month = monthKey;
-                
-                // 激活当前月份
-                if (state.activeMonth === monthKey) {
-                    tab.classList.add('active');
-                }
-                
-                tab.addEventListener('click', () => {
-                    activateTab(monthKey);
-                    addLog(`切换到${monthLabel}`);
-                });
-                
-                monthTabs.appendChild(tab);
+                monthsToShow.push({month, year: activeYear});
             }
         }
+        
+        // 生成月份标签
+        monthsToShow.forEach(({month, year}) => {
+            const monthName = month < 10 ? `0${month}` : month;
+            const monthKey = `${year}-${monthName}`;
+            const monthLabel = `${year}年${month}月`;
+            
+            const tab = document.createElement('button');
+            tab.className = 'tab-button';
+            tab.textContent = monthLabel;
+            tab.dataset.month = monthKey;
+            
+            if (state.activeMonth === monthKey) {
+                tab.classList.add('active');
+            }
+            
+            tab.addEventListener('click', () => {
+                activateTab(monthKey);
+                addLog(`切换到${monthLabel}`);
+                
+                // 移动端点击后重新生成月份标签
+                if (isMobile()) {
+                    generateMonthTabs();
+                }
+            });
+            
+            monthTabs.appendChild(tab);
+        });
+    }
 
-        // 激活标签
-        function activateTab(monthKey) {
-            state.activeMonth = monthKey;
-            localStorage.setItem('activeMonth', monthKey);
-            
-            // 更新活跃状态
-            document.querySelectorAll('.tab-button').forEach(tab => {
-                tab.classList.toggle('active', tab.dataset.month === monthKey);
-            });
-            
-            // 更新当前月份显示
-            updateCurrentMonthDisplay();
-            
-            // 显示对应月份的表格
-            document.querySelectorAll('.table-container').forEach(table => {
-                table.style.display = table.dataset.month === monthKey ? 'block' : 'none';
-            });
-        }
+ function activateTab(monthKey) {
+        state.activeMonth = monthKey;
+        localStorage.setItem('activeMonth', monthKey);
+        
+        // 更新活跃状态
+        document.querySelectorAll('.tab-button').forEach(tab => {
+            tab.classList.toggle('active', tab.dataset.month === monthKey);
+        });
+        
+        // 显示对应月份的表格
+        document.querySelectorAll('.table-container').forEach(table => {
+            table.style.display = table.dataset.month === monthKey ? 'block' : 'none';
+        });
+        
+        // 更新当前月份显示
+        updateCurrentMonthDisplay();
+    }
+
+    // 在窗口大小改变时重新生成月份标签
+    window.addEventListener('resize', function() {
+        generateMonthTabs();
+    });
 
         // 渲染所有月份的表格
         function renderAllTables() {
@@ -1679,7 +1713,9 @@ function goToToday() {
     // 添加日志
     addLog(`已返回今日`);
 }
-
+    function isMobile() {
+        return window.innerWidth <= 768;
+    }
 // 格式化日期为 YYYY-MM-DD
 function formatDate(date) {
     const year = date.getFullYear();
