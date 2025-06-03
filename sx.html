@@ -720,154 +720,131 @@
             height: 40px;
         }
 
-        /* 移动设备优化 */
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-                font-size: 15px;
-            }
-            
-            .header {
-                flex-direction: column;
-                gap: 15px;
-                align-items: flex-start;
-                padding: 12px 15px;
-            }
-            
-            .system-title h1 {
-                font-size: 22px;
-            }
-            
-            .system-title h1 i {
-                width: 36px;
-                height: 36px;
-                font-size: 18px;
-            }
-            
-            .system-info {
-                min-width: 100%;
-                max-width: 100%;
-            }
-            
-            .control-panel {
-                flex-direction: column;
-                padding: 12px;
-            }
-            
-            .panel-section {
-                min-width: 100%;
-            }
-            
+     @media (max-width: 768px) {
+            /* 按钮组优化 - 单行排列 */
             .btn-group {
-                flex-direction: column;
+                flex-direction: row !important;
+                overflow-x: auto;
+                padding-bottom: 5px;
+                flex-wrap: nowrap !important;
+                scrollbar-width: thin;
             }
             
+            .btn-group::-webkit-scrollbar {
+                height: 4px;
+            }
+            
+            .btn-group::-webkit-scrollbar-track {
+                background: #f1f1f1;
+            }
+            
+            .btn-group::-webkit-scrollbar-thumb {
+                background: #c1c1c1;
+            }
+            
+            /* 按钮大小优化 */
             .btn {
-                width: 100%;
-                justify-content: center;
+                padding: 8px 12px !important;
+                font-size: 13px !important;
+                min-height: 40px !important;
+                min-width: max-content;
+                flex-shrink: 0;
+            }
+                .btn-group .btn {
+        flex-shrink: 0 !important;
+        min-width: auto !important;
+    }
+            .btn i {
+                font-size: 4px !important;
             }
             
-            .date-range input {
-                max-width: 100%;
-            }
-            
+            /* 表格优化 */
             .fixed-column {
-                min-width: 120px;
-                padding: 8px 10px;
+                min-width: 90px !important;
+                font-size: 13px !important;
+                padding: 8px 10px !important;
             }
             
-            .date-header {
-                min-width: 36px;
-                font-size: 12px;
+            .editable-name {
+                min-width: 70px !important;
+                font-size: 13px !important;
+                padding: 3px 5px !important;
             }
             
-            .status-cell {
-                min-width: 36px;
-                height: 36px;
-            }
-            
-            .status-notes {
-                gap: 15px;
-                padding: 12px 15px;
-            }
-            
-            .log-panel {
-                padding: 15px;
-            }
-            
-            .log-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .log-header h3 {
-                font-size: 16px;
-            }
-            
-            .log-filter {
-                width: 100%;
-            }
-            
-            .popup-header h3 {
-                font-size: 16px;
-            }
-            
-            .popup-body {
-                padding: 10px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .system-title h1 {
-                font-size: 20px;
-            }
-            
-            .tab-button {
-                min-width: 80px;
-                padding: 6px 12px;
-                font-size: 13px;
-            }
-            
-            .table-container {
-                padding: 8px;
-            }
-            
-            .fixed-column {
-                min-width: 110px;
-                font-size: 13px;
+            .date-header, .status-cell {
+                min-width: 32px !important;
+                height: 32px !important;
+                font-size: 12px !important;
             }
             
             .status-dot {
-                font-size: 13px;
+                font-size: 12px !important;
             }
             
-            .status-notes {
-                gap: 12px;
-                padding: 10px 12px;
+            .delete-staff-btn {
+                width: 24px !important;
+                height: 24px !important;
+                font-size: 12px !important;
             }
             
-            .status-note-item {
-                font-size: 13px;
+            /* 控制面板优化 */
+            .control-panel {
+                gap: 12px !important;
+                padding: 12px !important;
             }
             
-            .status-icon {
-                width: 24px;
-                height: 24px;
-                font-size: 12px;
+            .panel-section {
+                min-width: 100% !important;
             }
             
-            .log-panel {
-                padding: 12px;
+            .date-range {
+                padding: 6px 10px !important;
             }
             
-            .log-container {
-                padding: 10px;
+            .date-range input {
+                padding: 6px !important;
+                font-size: 13px !important;
             }
             
-            .log-entry {
-                padding: 6px 8px;
-                font-size: 13px;
+            /* 系统信息优化 */
+            .system-info {
+                padding: 10px 12px !important;
+                min-width: 100% !important;
+                max-width: 100% !important;
             }
+            
+            .info-item {
+                font-size: 13px !important;
+            }
+        }
+        
+        /* 超小屏幕进一步优化 */
+        @media (max-width: 480px) {
+            .btn {
+                padding: 7px 10px !important;
+                font-size: 12px !important;
+            }
+            
+            .fixed-column {
+                min-width: 80px !important;
+            }
+            
+            .date-header, .status-cell {
+                min-width: 28px !important;
+                height: 28px !important;
+            }
+            
+            .system-title h1 {
+                font-size: 20px !important;
+            }
+            
+            .system-title h1 i {
+                width: 32px !important;
+                height: 32px !important;
+                font-size: 16px
+ !important;
+            }
+ 
 	.current-day {
     position: relative;
     border: 2px solid var(--primary) !important;
@@ -903,15 +880,7 @@
                     <select id="yearSelect" class="log-filter"></select>
                 </div>
             </div>
-<div class="panel-section">
-    <div class="panel-title"><i class="fas fa-tools"></i> 排班操作</div>
-    <div class="btn-group">
-        <!-- 原有按钮... -->
-        <button class="btn btn-warning" onclick="goToToday()">
-            <i class="fas fa-calendar-day"></i> 返回今日
-        </button>
-    </div>
-</div>
+
             <div class="system-info">
                 <div class="info-item">
                     <span>当前月份：</span>
@@ -945,12 +914,12 @@
                         <button class="btn btn-primary" onclick="toggleCustomSchedule()">
                             <i class="fas fa-eye"></i> 查看排班
                         </button>
-                        <button class="btn btn-success" onclick="exportExcel()">
-                            <i class="fas fa-file-excel"></i> 导出Excel
-                        </button>
                         <button class="btn btn-primary" onclick="addStaff()">
                             <i class="fas fa-user-plus"></i> 添加员工
                         </button>
+        <button class="btn btn-warning" onclick="goToToday()">
+            <i class="fas fa-calendar-day"></i> 返回今日
+        </button>
                     </div>
                 </div>
                 
@@ -963,6 +932,7 @@
                         <button class="btn btn-danger" onclick="clearLogs()">
                             <i class="fas fa-trash"></i> 清除记录
                         </button>
+
                     </div>
                 </div>
             </div>
@@ -1323,19 +1293,7 @@ function setupDefaultDates() {
             });
             
             // 添加新员工行
-            const addStaffRow = document.createElement('tr');
-            const addStaffCell = document.createElement('td');
-            addStaffCell.className = 'fixed-column';
-            addStaffCell.colSpan = lastDay.getDate() + 1;
-            
-            const addBtn = document.createElement('button');
-            addBtn.className = 'add-staff-btn';
-            addBtn.innerHTML = '<i class="fas fa-plus"></i> 添加新员工';
-            addBtn.onclick = addStaff;
-            
-            addStaffCell.appendChild(addBtn);
-            addStaffRow.appendChild(addStaffCell);
-            table.appendChild(addStaffRow);
+
             
             return table;
         }
@@ -1488,27 +1446,35 @@ function setupDefaultDates() {
             }
         }
 
-        // 添加新员工
-        function addStaff() {
-            const newStaffName = prompt('请输入新员工的姓名：');
-            if (newStaffName && newStaffName.trim() !== '') {
-                state.staff.push(newStaffName.trim());
-                
-                // 保存到localStorage
-                localStorage.setItem('staff', JSON.stringify(state.staff));
-                
-                // 重新渲染表格
-                renderAllTables();
-                activateTab(state.activeMonth);
-                
-                // 添加日志
-                addLog(`添加新员工：${newStaffName.trim()}`);
-                
-                // 更新统计数据
-                updateStats();
+function addStaff() {
+    const newStaffName = prompt('请输入新员工的姓名：');
+    if (newStaffName && newStaffName.trim() !== '') {
+        const trimmedName = newStaffName.trim();
+        state.staff.push(trimmedName);
+        
+        // 保存到localStorage
+        localStorage.setItem('staff', JSON.stringify(state.staff));
+        
+        // 重新渲染表格
+        renderAllTables();
+        activateTab(state.activeMonth);
+        
+        // 添加日志
+        addLog(`添加新员工：${trimmedName}`);
+        
+        // 更新统计数据
+        updateStats();
+        
+        // 滚动到新员工
+        setTimeout(() => {
+            const newStaffRows = document.querySelectorAll('.fixed-column');
+            if (newStaffRows.length > 0) {
+                const lastStaffRow = newStaffRows[newStaffRows.length - 1];
+                lastStaffRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }
-        }
-
+        }, 300);
+    }
+}
         // 删除员工
         function deleteStaff(staffIndex) {
             const staffName = state.staff[staffIndex];
@@ -1531,90 +1497,40 @@ function setupDefaultDates() {
         }
 
         // 重置排班
-        function resetSchedule() {
-            if (confirm('确定要重置所有排班记录吗？')) {
-                state.schedule = {};
-                localStorage.setItem('schedule', JSON.stringify(state.schedule));
-                
-                // 重新渲染表格
-                renderAllTables();
-                activateTab(state.activeMonth);
-                
-                // 添加日志
-                addLog('所有排班已重置');
-                
-                // 更新统计数据
-                updateStats();
-            }
-        }
-
-        // 清除日志
-        function clearLogs() {
-            if (confirm('确定要清除所有操作记录吗？')) {
-                state.logs = [];
-                localStorage.setItem('logs', JSON.stringify(state.logs));
-                refreshLogs();
-            }
-        }
-
-        // 导出Excel
-        function exportExcel() {
-            // 创建一个工作簿
-            const wb = XLSX.utils.book_new();
-            
-            // 为每个月创建一个工作表
-            for (let month = 1; month <= 12; month++) {
-                // 创建该月份的二维数组
-                const monthData = [];
-                
-                // 添加标题行
-                const titleRow = [`${state.year}年${month}月排班表`];
-                monthData.push(titleRow);
-                
-                // 添加空行
-                monthData.push([]);
-                
-                // 创建表头行
-                const headerRow = ['员工'];
-                const firstDay = new Date(state.year, month - 1, 1);
-                const lastDay = new Date(state.year, month, 0);
-                
-                for (let day = 1; day <= lastDay.getDate(); day++) {
-                    headerRow.push(`${day}`);
-                }
-                monthData.push(headerRow);
-                
-                // 添加员工数据
-                state.staff.forEach(staff => {
-                    const row = [staff];
-                    
-                    for (let day = 1; day <= lastDay.getDate(); day++) {
-                        const dateStr = `${state.year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-                        let status = '班';
-                        
-
-    const today = new Date();
-    if (today.getFullYear() === state.year && 
-        today.getMonth() + 1 === month && 
-        today.getDate() === day) {
-        th.classList.add('current-day');
+function resetSchedule() {
+    if (confirm('确定要重置所有排班记录吗？')) {
+        state.schedule = {};
+        localStorage.setItem('schedule', JSON.stringify(state.schedule));
+        
+        // 重新渲染表格
+        renderAllTables();
+        activateTab(state.activeMonth);
+        
+        // 添加日志
+        addLog('所有排班已重置');
+        
+        // 更新统计数据
+        updateStats();
+        
+        // 显示成功提示
+        alert('排班已成功重置！');
     }
-                        
-                        row.push(status);
-                    }
-                    
-                    monthData.push(row);
-                });
-                
-                // 添加到工作簿
-                const ws = XLSX.utils.aoa_to_sheet(monthData);
-                XLSX.utils.book_append_sheet(wb, ws, `${month}月`);
-            }
-            
-            // 导出Excel文件
-            XLSX.writeFile(wb, `${state.year}年售后排班表.xlsx`);
-            addLog('排班数据已导出为Excel文件');
-        }
+}
+function clearLogs() {
+    if (confirm('确定要清除所有操作记录吗？')) {
+        state.logs = [];
+        localStorage.setItem('logs', JSON.stringify(state.logs));
+        refreshLogs();
+        
+        // 添加一条初始日志
+        state.logs.push({
+            time: new Date().toLocaleTimeString(), 
+            message: "操作记录已清空"
+        });
+        refreshLogs();
+    }
+}
+
 
         // 获取星期几
         function getWeekday(date) {
