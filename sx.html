@@ -37,6 +37,8 @@
             min-height: 100vh;
             font-size: 15px;
             line-height: 1.5;
+            max-width: 100vw;
+            overflow-x: hidden;
         }
 
         .container {
@@ -129,18 +131,6 @@
             box-shadow: var(--shadow);
         }
 
-        .date-range label {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            color: var(--text);
-        }
-
-        .date-range label i {
-            font-size: 16px;
-            color: var(--primary);
-        }
-
         .date-range input {
             padding: 8px 12px;
             font-size: 14px;
@@ -214,7 +204,6 @@
             margin-bottom: 16px;
             overflow-x: auto;
             scrollbar-width: none;
-            -webkit-overflow-scrolling: touch;
         }
 
         .month-tabs::-webkit-scrollbar {
@@ -233,7 +222,6 @@
             text-align: center;
             font-size: 14px;
             color: var(--text-light);
-            white-space: nowrap;
         }
 
         .tab-button:hover {
@@ -248,10 +236,11 @@
         }
 
         .table-container {
-            padding: 0 20px;
+            padding: 0;
             margin-bottom: 20px;
             overflow-x: auto;
             scrollbar-width: thin;
+            position: relative;
         }
 
         .table-container::-webkit-scrollbar {
@@ -273,7 +262,7 @@
             border-spacing: 0;
             font-size: 14px;
             width: 100%;
-            min-width: max-content;
+            min-width: 700px;
         }
 
         .dense-table th, .dense-table td {
@@ -284,13 +273,13 @@
             position: sticky;
             left: 0;
             background: var(--card-bg);
-            z-index: 2;
+            z-index: 10;
             min-width: 120px;
             padding: 8px 12px;
             font-weight: 600;
             text-align: left;
             border-radius: 8px 0 0 8px;
-            box-shadow: 4px 0 8px rgba(0, 0, 0, 0.05);
+            box-shadow: 6px 0 12px rgba(0,0,0,0.06);
         }
 
         .dense-table tr:hover {
@@ -312,10 +301,10 @@
         }
 
         .date-header.current-day, .current-day {
-            background: var(--primary) !important;
+            background: #f59e0b !important; /* 橙色 */
             color: white !important;
             font-weight: bold;
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
         }
 
         .status-cell {
@@ -575,66 +564,50 @@
 
         @media (max-width: 768px) {
             body {
-                padding: 8px;
+                padding: 10px;
             }
 
             .container {
-                border-radius: 12px;
-                margin: 0;
+                border-radius: 16px;
             }
 
             .header {
-                padding: 12px 8px;
-                border-radius: 0 0 12px 12px;
+                padding: 16px 12px;
+                border-radius: 0 0 16px 16px;
             }
 
             .system-title h1 {
-                font-size: 16px;
-                gap: 8px;
+                font-size: 18px;
             }
 
             .system-title h1 i {
-                width: 32px;
-                height: 32px;
-                font-size: 16px;
+                width: 36px;
+                height: 36px;
+                font-size: 18px;
             }
 
             .control-panel {
                 flex-direction: column;
                 gap: 12px;
-                padding: 12px;
-                margin: 12px;
-                border-radius: 12px;
+                padding: 10px;
+                margin: 8px 0;
             }
 
             .panel-section {
                 width: 100%;
-            }
-
-            .panel-title {
-                font-size: 14px;
-            }
-
-            .date-range {
-                flex-direction: column;
-                align-items: stretch;
+                flex-direction: row;
+                flex-wrap: wrap;
                 gap: 8px;
-                padding: 12px;
+                align-items: center;
             }
 
-            .date-range label {
-                font-size: 0;
-                justify-content: center;
-            }
-
-            .date-range label i {
-                font-size: 18px;
-            }
-
-            .date-range input {
-                width: 100%;
-                padding: 8px;
-                font-size: 14px;
+            .panel-section .log-filter,
+            .panel-section input[type="date"] {
+                font-size: 16px;
+                min-width: 120px;
+                padding: 10px 8px;
+                margin-bottom: 4px;
+                border-radius: 10px;
             }
 
             .btn-group {
@@ -643,118 +616,136 @@
             }
 
             .btn {
-                flex: 1;
-                min-width: 120px;
-                padding: 8px 12px;
-                font-size: 13px;
-                min-height: 36px;
-                justify-content: center;
-            }
-
-            .btn i {
+                padding: 8px 10px;
                 font-size: 14px;
+                min-height: 36px;
+                border-radius: 8px;
             }
 
             .month-tabs {
-                padding: 0 12px;
-                margin-bottom: 12px;
-                gap: 4px;
-                justify-content: flex-start;
+                padding: 0 6px;
+                margin-bottom: 8px;
             }
 
             .tab-button {
-                padding: 6px 10px;
-                font-size: 12px;
-                min-width: 50px;
+                padding: 5px 8px;
+                font-size: 13px;
+                min-width: 54px;
+                border-radius: 7px;
             }
 
             .table-container {
-                padding: 0 12px;
-                margin-bottom: 12px;
+                padding: 0;
+                margin-bottom: 10px;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                position: relative;
             }
 
             .dense-table th, .dense-table td {
                 font-size: 12px;
-                padding: 4px 2px;
+                padding: 5px 2px;
             }
 
             .fixed-column {
                 min-width: 80px;
-                padding: 4px 6px;
-                font-size: 12px;
+                padding: 5px 6px;
+                left: 0;
+                z-index: 10;
+                background: var(--card-bg);
+                box-shadow: 6px 0 12px rgba(0,0,0,0.08);
             }
 
             .status-cell {
-                min-width: 36px;
-                height: 36px;
+                min-width: 32px;
+                height: 32px;
             }
 
             .status-dot {
                 font-size: 12px;
-                border-radius: 6px;
             }
 
             .status-notes {
                 flex-direction: column;
-                gap: 8px;
-                padding: 12px;
-                margin: 0 12px 12px;
+                gap: 6px;
+                padding: 8px;
+                margin: 0 2px 8px;
             }
 
             .status-note-item {
                 font-size: 12px;
-                gap: 8px;
-            }
-
-            .status-icon {
-                width: 20px;
-                height: 20px;
-                font-size: 12px;
             }
 
             .log-panel {
-                margin: 0 12px;
-                padding: 12px;
+                margin: 0 2px;
+                padding: 8px;
             }
 
             .log-header {
                 gap: 8px;
                 margin-bottom: 8px;
+                flex-wrap: wrap;
             }
 
             .log-header h3 {
-                font-size: 14px;
+                font-size: 13px;
             }
 
             .log-filter {
-                padding: 6px 8px;
+                padding: 5px 6px;
                 font-size: 12px;
-                min-width: 90px;
+                min-width: 80px;
             }
 
             .log-container {
-                max-height: 120px;
+                max-height: 100px;
             }
 
             .log-entry {
-                padding: 4px 6px;
+                padding: 4px 4px;
                 font-size: 12px;
             }
 
             .log-time {
-                font-size: 11px;
-                min-width: 36px;
+                font-size: 10px;
+                min-width: 32px;
             }
 
-            .editable-name {
+            .mobile-refresh-btn {
+                display: inline-flex !important;
+                align-items: center;
+                margin-left: 4px;
+                font-size: 15px;
+                min-height: 32px;
+            }
+
+            #currentMonthDisplay {
+                font-size: 15px !important;
+            }
+
+            #yearSelect {
+                display: none !important;
+            }
+
+            .panel-section {
+                flex-wrap: wrap;
+                gap: 6px;
+            }
+            label[for="startDate"] {
+                display: none !important;
+            }
+            #startDate, #endDate {
+                width: 100%;
+                max-width: 180px;
+                box-sizing: border-box;
+            }
+            .panel-section input[type="date"]::placeholder {
+                color: #bdbdbd;
+                font-size: 15px;
+            }
+            .dense-table {
+                min-width: 480px;
                 font-size: 12px;
-                padding: 3px 6px;
-            }
-
-            .delete-staff-btn {
-                width: 20px;
-                height: 20px;
-                font-size: 11px;
             }
         }
 
@@ -792,172 +783,111 @@
             .log-container {
                 max-height: 200px;
             }
+
+            .mobile-refresh-btn {
+                display: none !important;
+            }
         }
 
-        /* 排班弹窗样式 */
         .schedule-popup {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.5);
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 9999;
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 1000;
-            padding: 16px;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
         }
-
-        .schedule-popup.active {
-            opacity: 1;
-            visibility: visible;
+        .schedule-popup .popup-mask {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.35);
+            z-index: 0;
+            animation: maskIn 0.2s;
         }
-
-        .popup-content {
-            background: white;
+        .schedule-popup .popup-content {
+            position: relative;
+            z-index: 1;
+            background: #fff;
             border-radius: 16px;
-            width: 100%;
-            max-width: 900px;
-            max-height: 90vh;
-            overflow: hidden;
-            box-shadow: var(--shadow-lg);
-            transform: translateY(20px);
-            transition: all 0.3s ease;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+            padding: 24px 24px 18px 24px;
+            min-width: 320px;
+            max-width: 90vw;
+            max-height: 80vh;
+            overflow: auto;
+            animation: popupIn 0.25s cubic-bezier(.4,1.6,.6,1);
         }
-
-        .schedule-popup.active .popup-content {
-            transform: translateY(0);
-        }
-
-        .popup-header {
+        .schedule-popup .popup-header {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 16px 20px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
+            justify-content: space-between;
+            margin-bottom: 16px;
         }
-
-        .popup-header h3 {
+        .schedule-popup .popup-header h3 {
             font-size: 18px;
             font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            margin: 0;
         }
-
-        .close-btn {
+        .schedule-popup .close-btn {
             background: none;
             border: none;
-            color: white;
             font-size: 24px;
+            color: #888;
             cursor: pointer;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             border-radius: 50%;
-            transition: all 0.2s ease;
+            width: 36px; height: 36px;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s;
         }
-
-        .close-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
+        .schedule-popup .close-btn:hover {
+            background: #f3f4f6;
+            color: #ef4444;
         }
-
-        .popup-body {
-            padding: 20px;
-            overflow: auto;
-            max-height: calc(90vh - 70px);
+        .schedule-popup .popup-body {
+            overflow-x: auto;
         }
-
-        .schedule-table {
+        .schedule-popup .schedule-table {
+            border-collapse: collapse;
             width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
+            min-width: 500px;
             font-size: 14px;
-            min-width: max-content;
         }
-
-        .schedule-table th, .schedule-table td {
-            padding: 8px 4px;
-        }
-
-        .schedule-table th {
-            background: var(--light-bg);
+        .schedule-popup .schedule-table th, .schedule-popup .schedule-table td {
+            border: 1px solid #e5e7eb;
+            padding: 8px 6px;
             text-align: center;
+        }
+        .schedule-popup .schedule-table th {
+            background: #f8fafc;
             font-weight: 600;
-            color: var(--text-light);
-            border: none;
-            position: sticky;
-            top: 0;
-            z-index: 2;
         }
-
-        .schedule-table td {
-            text-align: center;
-            border: none;
+        .schedule-popup .schedule-table .current-day {
+            background: #f59e0b !important;
+            color: #fff !important;
         }
-
-        .schedule-table .fixed-column {
-            position: sticky;
-            left: 0;
-            background: var(--card-bg);
-            z-index: 3;
-            min-width: 120px;
-            padding: 8px 12px;
-            font-weight: 600;
-            text-align: left;
-            border-radius: 8px 0 0 8px;
-            box-shadow: 4px 0 8px rgba(0, 0, 0, 0.05);
-        }
-
-        .schedule-table tr:hover {
-            background: var(--light-bg);
-        }
-
-        /* 移动端刷新按钮样式 */
-        .refresh-btn {
-            display: none;
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            border: none;
-            box-shadow: var(--shadow-lg);
-            cursor: pointer;
-            z-index: 100;
-            transition: all 0.3s ease;
-        }
-
-        .refresh-btn i {
-            font-size: 20px;
-        }
-
-        .refresh-btn:active {
-            transform: scale(0.95);
-        }
-
-        @media (max-width: 768px) {
-            .refresh-btn {
-                display: flex;
-                align-items: center;
-                justify-content: center;
+        @media (max-width: 600px) {
+            .schedule-popup .popup-content {
+                min-width: 0;
+                width: 98vw;
+                padding: 10px 2vw 10px 2vw;
+            }
+            .schedule-popup .schedule-table {
+                min-width: 320px;
+                font-size: 12px;
+            }
+            .schedule-popup .close-btn {
+                width: 44px;
+                height: 44px;
+                font-size: 30px;
             }
         }
-
-        @media (max-width: 768px) {
-            .schedule-popup {
-                padding: 12px;
-            }
+        @keyframes popupIn {
+            0% { transform: scale(0.85) translateY(40px); opacity: 0; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+        @keyframes maskIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
         }
     </style>
 </head>
@@ -971,10 +901,12 @@
         <div class="content">
             <div class="control-panel">
                 <div class="panel-section" style="flex-direction: row; align-items: center; gap: 12px;">
-                    <label for="startDate"><i class="fas fa-calendar-day"></i></label>
-                    <input type="date" id="startDate">
+                    <label for="yearSelect" style="margin-right: 6px;"><i class="fas fa-calendar"></i></label>
+                    <select id="yearSelect" class="log-filter" style="min-width: 80px;"></select>
+                    <label for="startDate" style="margin: 0 6px 0 18px;"><i class="fas fa-calendar-day"></i></label>
+                    <input type="date" id="startDate" placeholder="开始日期">
                     <span style="margin: 0 4px;">至</span>
-                    <input type="date" id="endDate">
+                    <input type="date" id="endDate" placeholder="结束日期">
                 </div>
                 
                 <div class="panel-section">
@@ -987,7 +919,7 @@
                             <i class="fas fa-user-plus"></i> 添加员工
                         </button>
                         <button class="btn btn-success" onclick="autoArrange231()">
-                            <i class="fas fa-magic"></i> 自动生成上二休一
+                            <i class="fas fa-magic"></i> 自动排班
                         </button>
                         <button class="btn btn-warning" onclick="goToToday()">
                             <i class="fas fa-calendar-day"></i> 返回今日
@@ -995,11 +927,17 @@
                         <button class="btn btn-warning" onclick="resetSchedule()">
                             <i class="fas fa-undo"></i> 重置排班
                         </button>
+                        <button class="btn btn-warning mobile-refresh-btn" style="display:none" onclick="location.reload()">
+                            <i class="fas fa-sync-alt"></i> 刷新
+                        </button>
                     </div>
                 </div>
             </div>
             
             <div class="month-tabs" id="monthTabs"></div>
+            <div style="text-align:center; margin: 8px 0; font-size: 18px; font-weight: bold;">
+                <span id="currentMonthDisplay"></span>
+            </div>
             
             <div id="tablesContainer">
                 <div class="empty-state">
@@ -1051,26 +989,6 @@
         </div>
     </div>
 
-    <!-- 排班查看弹窗 -->
-    <div class="schedule-popup" id="schedulePopup">
-        <div class="popup-content">
-            <div class="popup-header">
-                <h3><i class="fas fa-calendar-alt"></i> 排班查看</h3>
-                <button class="close-btn" onclick="toggleCustomSchedule()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="popup-body" id="schedulePopupBody">
-                <!-- 弹窗内容将通过 JavaScript 动态生成 -->
-            </div>
-        </div>
-    </div>
-
-    <!-- 移动端刷新按钮 -->
-    <button class="refresh-btn" onclick="refreshAll()" title="刷新">
-        <i class="fas fa-sync-alt"></i>
-    </button>
-
     <script>
         // 状态管理
        const state = {
@@ -1086,15 +1004,20 @@
         // 初始化系统
         function initSystem() {
             // 尝试从localStorage加载数据
+            const savedYear = localStorage.getItem('year');
             const savedStaff = localStorage.getItem('staff');
             const savedSchedule = localStorage.getItem('schedule');
             const savedLogs = localStorage.getItem('logs');
             const savedActiveMonth = localStorage.getItem('activeMonth');
             
+            if (savedYear) state.year = parseInt(savedYear);
             if (savedStaff) state.staff = JSON.parse(savedStaff);
             if (savedSchedule) state.schedule = JSON.parse(savedSchedule);
             if (savedLogs) state.logs = JSON.parse(savedLogs);
             if (savedActiveMonth) state.activeMonth = savedActiveMonth;
+            
+            // 初始化年份选择器
+            initYearSelector();
             
             // 生成月份标签
             generateMonthTabs();
@@ -1111,41 +1034,63 @@
             // 绑定事件监听器
             document.getElementById('logFilter').addEventListener('change', refreshLogs);
             document.addEventListener('input', handleNameEdit);
+            document.getElementById('yearSelect').addEventListener('change', changeYear);
             
             // 设置默认日期范围
             setupDefaultDates();
             
             // 刷新日志
             refreshLogs();
+    
+  setupDefaultDates();
+    const today = new Date();
+    const currentMonthKey = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}`;
+    
+    // 如果当前月份标签存在，则激活它
+    if (document.querySelector(`.tab-button[data-month="${currentMonthKey}"]`)) {
+        activateTab(currentMonthKey);
+        
+        // 添加日志
+        addLog(`自动跳转到当前月份: ${currentMonthKey}`);
+    }
+    
+    // 添加自动滚动到当前日期功能
+    setTimeout(() => {
+        const todayCell = document.querySelector(`.current-day`);
+        if (todayCell) {
+            todayCell.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'nearest', 
+                inline: 'center' 
+            });
         }
-
+    }, 300);
+}
+function setupDefaultDates() {
+    const today = new Date();
+    const startDate = new Date(today.getFullYear(), today.getMonth(), 1);
+    const endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+    
+    document.getElementById('startDate').valueAsDate = startDate;
+    document.getElementById('endDate').valueAsDate = endDate;
+}
         // 更新当前月份显示
         function updateCurrentMonthDisplay() {
             const monthNames = ['一月', '二月', '三月', '四月', '五月', '六月', 
                                 '七月', '八月', '九月', '十月', '十一月', '十二月'];
-            const monthNum = parseInt(state.activeMonth.split('-')[1]);
-            document.getElementById('currentMonthDisplay').textContent = monthNames[monthNum - 1];
+            const [year, month] = state.activeMonth.split('-');
+            const monthNum = parseInt(month);
+            document.getElementById('currentMonthDisplay').textContent = `${year}年${monthNames[monthNum - 1]}`;
         }
 
         // 设置默认日期范围
         function setupDefaultDates() {
             const today = new Date();
-            const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
-            const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+            const startDate = new Date(today.getFullYear(), today.getMonth(), 1);
+            const endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
             
-            const startDateInput = document.getElementById('startDate');
-            const endDateInput = document.getElementById('endDate');
-            
-            // 格式化日期为 YYYY-MM-DD
-            const formatDate = (date) => {
-                const year = date.getFullYear();
-                const month = String(date.getMonth() + 1).padStart(2, '0');
-                const day = String(date.getDate()).padStart(2, '0');
-                return `${year}-${month}-${day}`;
-            };
-            
-            startDateInput.value = formatDate(firstDay);
-            endDateInput.value = formatDate(lastDay);
+            document.getElementById('startDate').valueAsDate = startDate;
+            document.getElementById('endDate').valueAsDate = endDate;
         }
 
         // 初始化年份选择器
@@ -1178,82 +1123,92 @@
                 renderAllTables();
                 // 激活该年1月
                 activateTab(`${state.year}-01`);
+                updateCurrentMonthDisplay();
                 addLog(`年份切换为 ${newYear}`);
             }
         }
 
-        // 生成月份标签
-        function generateMonthTabs() {
-            const monthTabs = document.getElementById('monthTabs');
-            monthTabs.innerHTML = '';
-            
-            const currentYear = new Date().getFullYear();
-            const months = [
-                '一月', '二月', '三月', '四月', '五月', '六月',
-                '七月', '八月', '九月', '十月', '十一月', '十二月'
+    function generateMonthTabs() {
+        const monthTabs = document.getElementById('monthTabs');
+        monthTabs.innerHTML = '';
+        
+        // 获取当前活跃月份信息
+        const [activeYear, activeMonth] = state.activeMonth.split('-').map(Number);
+        
+        // 确定要显示的月份范围
+        let monthsToShow = [];
+        if (isMobile()) {
+            // 移动端只显示当前月及前后各一个月
+            monthsToShow = [
+                {month: activeMonth - 1, year: activeYear},
+                {month: activeMonth, year: activeYear},
+                {month: activeMonth + 1, year: activeYear}
             ];
             
-            // 在移动端只显示当前月份的前后各2个月
-            if (window.innerWidth <= 768) {
-                const currentMonth = new Date().getMonth();
-                const startMonth = Math.max(0, currentMonth - 2);
-                const endMonth = Math.min(11, currentMonth + 2);
-                
-                for (let i = startMonth; i <= endMonth; i++) {
-                    const monthKey = `${currentYear}-${(i + 1).toString().padStart(2, '0')}`;
-                    const tab = createMonthTab(monthKey, months[i]);
-                    monthTabs.appendChild(tab);
-                }
-            } else {
-                // 在桌面端显示当前年份的所有月份
-                for (let i = 0; i < 12; i++) {
-                    const monthKey = `${currentYear}-${(i + 1).toString().padStart(2, '0')}`;
-                    const tab = createMonthTab(monthKey, months[i]);
-                    monthTabs.appendChild(tab);
-                }
+            // 处理跨年情况
+            monthsToShow = monthsToShow.map(m => {
+                if (m.month === 0) return {month: 12, year: m.year - 1};
+                if (m.month === 13) return {month: 1, year: m.year + 1};
+                return m;
+            }).filter(m => m.month >= 1 && m.month <= 12);
+        } else {
+            // 桌面端显示所有月份
+            for (let month = 1; month <= 12; month++) {
+                monthsToShow.push({month, year: activeYear});
+            }
+        }
+        
+        // 生成月份标签
+        monthsToShow.forEach(({month, year}) => {
+            const monthName = month < 10 ? `0${month}` : month;
+            const monthKey = `${year}-${monthName}`;
+            const monthLabel = `${year}年${month}月`;
+            
+            const tab = document.createElement('button');
+            tab.className = 'tab-button';
+            tab.textContent = monthLabel;
+            tab.dataset.month = monthKey;
+            
+            if (state.activeMonth === monthKey) {
+                tab.classList.add('active');
             }
             
-            // 激活当前月份标签
-            const today = new Date();
-            const currentMonthKey = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}`;
-            activateTab(currentMonthKey);
-        }
-
-        // 创建月份标签
-        function createMonthTab(monthKey, monthName) {
-            const tab = document.createElement('div');
-            tab.className = 'tab-button';
-            tab.setAttribute('data-month', monthKey);
-            tab.innerHTML = `
-                <i class="fas fa-calendar-alt"></i>
-                <span>${monthName}</span>
-            `;
-            tab.onclick = () => activateTab(monthKey);
-            return tab;
-        }
-
-        // 监听窗口大小变化
-        window.addEventListener('resize', () => {
-            generateMonthTabs();
+            tab.addEventListener('click', () => {
+                activateTab(monthKey);
+                addLog(`切换到${monthLabel}`);
+                
+                // 移动端点击后重新生成月份标签
+                if (isMobile()) {
+                    generateMonthTabs();
+                }
+            });
+            
+            monthTabs.appendChild(tab);
         });
+    }
 
-        function activateTab(monthKey) {
-            state.activeMonth = monthKey;
-            localStorage.setItem('activeMonth', monthKey);
-            
-            // 更新活跃状态
-            document.querySelectorAll('.tab-button').forEach(tab => {
-                tab.classList.toggle('active', tab.dataset.month === monthKey);
-            });
-            
-            // 显示对应月份的表格
-            document.querySelectorAll('.table-container').forEach(table => {
-                table.style.display = table.dataset.month === monthKey ? 'block' : 'none';
-            });
-            
-            // 更新当前月份显示
-            updateCurrentMonthDisplay();
-        }
+ function activateTab(monthKey) {
+        state.activeMonth = monthKey;
+        localStorage.setItem('activeMonth', monthKey);
+        
+        // 更新活跃状态
+        document.querySelectorAll('.tab-button').forEach(tab => {
+            tab.classList.toggle('active', tab.dataset.month === monthKey);
+        });
+        
+        // 显示对应月份的表格
+        document.querySelectorAll('.table-container').forEach(table => {
+            table.style.display = table.dataset.month === monthKey ? 'block' : 'none';
+        });
+        
+        // 更新当前月份显示
+        updateCurrentMonthDisplay();
+    }
+
+    // 在窗口大小改变时重新生成月份标签
+    window.addEventListener('resize', function() {
+        generateMonthTabs();
+    });
 
         // 渲染所有月份的表格
         function renderAllTables() {
@@ -1501,23 +1456,23 @@
             }
         }
 
-        function addStaff() {
-            const newStaffName = prompt('请输入新员工的姓名：');
-            if (newStaffName && newStaffName.trim() !== '') {
-                const trimmedName = newStaffName.trim();
-                state.staff.push(trimmedName);
-                
-                // 保存到localStorage
-                localStorage.setItem('staff', JSON.stringify(state.staff));
-                
-                // 重新渲染表格
-                renderAllTables();
-                activateTab(state.activeMonth);
-                
-                // 添加日志
-                addLog(`添加新员工：${trimmedName}`);
-            }
-        }
+function addStaff() {
+    const newStaffName = prompt('请输入新员工的姓名：');
+    if (newStaffName && newStaffName.trim() !== '') {
+        const trimmedName = newStaffName.trim();
+        state.staff.push(trimmedName);
+        
+        // 保存到localStorage
+        localStorage.setItem('staff', JSON.stringify(state.staff));
+        
+        // 重新渲染表格
+        renderAllTables();
+        activateTab(state.activeMonth);
+        
+        // 添加日志
+        addLog(`添加新员工：${trimmedName}`);
+    }
+}
         // 删除员工
         function deleteStaff(staffIndex) {
             const staffName = state.staff[staffIndex];
@@ -1537,33 +1492,29 @@
         }
 
         // 重置排班
-        function resetSchedule() {
-            if (confirm('确定要重置所有排班记录吗？')) {
-                state.schedule = {};
-                localStorage.setItem('schedule', JSON.stringify(state.schedule));
-                
-                // 重新渲染表格
-                renderAllTables();
-                activateTab(state.activeMonth);
-                
-                // 添加日志
-                addLog('所有排班已重置');
-            }
-        }
-        function clearLogs() {
-            if (confirm('确定要清除所有操作记录吗？')) {
-                state.logs = [];
-                localStorage.setItem('logs', JSON.stringify(state.logs));
-                refreshLogs();
-                
-                // 添加一条初始日志
-                state.logs.push({
-                    time: new Date().toLocaleTimeString(), 
-                    message: "操作记录已清空"
-                });
-                refreshLogs();
-            }
-        }
+function resetSchedule() {
+    if (confirm('确定要重置所有排班记录吗？')) {
+        state.schedule = {};
+        localStorage.setItem('schedule', JSON.stringify(state.schedule));
+        
+        // 重新渲染表格
+        renderAllTables();
+        activateTab(state.activeMonth);
+        
+        // 添加日志
+        addLog('所有排班已重置');
+    }
+}
+function clearLogs() {
+    if (confirm('确定要清除所有操作记录吗？')) {
+        state.logs = [{
+            time: new Date().toLocaleTimeString(),
+            message: "操作记录已清空"
+        }];
+        localStorage.setItem('logs', JSON.stringify(state.logs));
+        refreshLogs();
+    }
+}
 
 
         // 获取星期几
@@ -1571,124 +1522,170 @@
             const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
             return weekdays[date.getDay()];
         }
-        // 查看排班功能
-        function toggleCustomSchedule() {
-            const popup = document.getElementById('schedulePopup');
-            popup.classList.toggle('active');
-            
-            if (popup.classList.contains('active')) {
-                const startDate = document.getElementById('startDate').value;
-                const endDate = document.getElementById('endDate').value;
-                
-                if (!startDate || !endDate) {
-                    alert('请选择日期范围');
-                    popup.classList.remove('active');
-                    return;
-                }
-                
-                const start = new Date(startDate);
-                const end = new Date(endDate);
-                const dateRange = [];
-                let d = new Date(start);
-                
-                while (d <= end) {
-                    dateRange.push(new Date(d));
-                    d.setDate(d.getDate() + 1);
-                }
-                
-                const popupBody = document.getElementById('schedulePopupBody');
-                popupBody.innerHTML = '';
-                
-                const table = document.createElement('table');
-                table.className = 'schedule-table';
-                
-                // 创建表头
-                const headerRow = document.createElement('tr');
-                const nameHeader = document.createElement('th');
-                nameHeader.className = 'fixed-column';
-                nameHeader.textContent = '员工';
-                headerRow.appendChild(nameHeader);
-                
-                dateRange.forEach(date => {
-                    const th = document.createElement('th');
-                    th.textContent = `${date.getMonth() + 1}/${date.getDate()}`;
-                    th.innerHTML += `<div>${getWeekday(date)}</div>`;
-                    headerRow.appendChild(th);
-                });
-                
-                table.appendChild(headerRow);
-                
-                // 创建员工行
-                state.staff.forEach(staff => {
-                    const row = document.createElement('tr');
-                    
-                    const nameCell = document.createElement('td');
-                    nameCell.className = 'fixed-column';
-                    nameCell.textContent = staff;
-                    row.appendChild(nameCell);
-                    
-                    dateRange.forEach(date => {
-                        const dateStr = formatDate(date);
-                        const statusCell = document.createElement('td');
-                        statusCell.className = 'status-cell';
-                        
-                        let status = '班';
-                        if (state.schedule[staff] && state.schedule[staff][dateStr]) {
-                            status = state.schedule[staff][dateStr];
-                        }
-                        
-                        const dot = document.createElement('div');
-                        dot.className = `status-dot ${status}`;
-                        dot.textContent = status;
-                        statusCell.appendChild(dot);
-                        
-                        row.appendChild(statusCell);
-                    });
-                    
-                    table.appendChild(row);
-                });
-                
-                popupBody.appendChild(table);
-            }
-        }
+// 查看排班功能
+function toggleCustomSchedule() {
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+    
+    if (!startDate || !endDate) {
+        alert('请选择日期范围');
+        return;
+    }
+    
+    // 创建弹窗显示排班信息
+    createSchedulePopup(startDate, endDate);
+    addLog(`查看排班: ${startDate} 至 ${endDate}`);
+}
 
-        function goToToday() {
-            const today = new Date();
-            const currentMonthKey = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}`;
-            
-            // 激活当前月份标签
-            activateTab(currentMonthKey);
-            
-            // 滚动到当前日期
-            setTimeout(() => {
-                const todayCell = document.querySelector(`.current-day`);
-                if (todayCell) {
-                    todayCell.scrollIntoView({ 
-                        behavior: 'smooth', 
-                        block: 'nearest', 
-                        inline: 'center' 
-                    });
-                }
-            }, 300);
-            
-            // 添加日志
-            addLog(`已返回今日`);
+// 创建排班弹窗
+function createSchedulePopup(startDate, endDate) {
+    // 移除现有弹窗
+    const existingPopup = document.getElementById('schedulePopup');
+    if (existingPopup) existingPopup.remove();
+    // 创建弹窗元素
+    const popup = document.createElement('div');
+    popup.id = 'schedulePopup';
+    popup.className = 'schedule-popup';
+    // 遮罩
+    const mask = document.createElement('div');
+    mask.className = 'popup-mask';
+    mask.onclick = () => popup.remove();
+    popup.appendChild(mask);
+    // 弹窗内容
+    const content = document.createElement('div');
+    content.className = 'popup-content';
+    content.innerHTML = `
+        <div class="popup-header">
+            <h3>${startDate} 至 ${endDate} 排班详情</h3>
+            <button class="close-btn" title="关闭">&times;</button>
+        </div>
+        <div class="popup-body" id="popupScheduleTable"></div>
+    `;
+    popup.appendChild(content);
+    document.body.appendChild(popup);
+    // 关闭按钮事件
+    content.querySelector('.close-btn').addEventListener('click', () => {
+        popup.remove();
+    });
+    // 生成排班表格
+    generateScheduleTable(startDate, endDate);
+}
+
+// 生成排班表格
+function generateScheduleTable(startDate, endDate) {
+    const tableContainer = document.getElementById('popupScheduleTable');
+    tableContainer.innerHTML = '';
+    
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    
+    // 计算日期范围
+    const dateRange = [];
+    let currentDate = new Date(start);
+    while (currentDate <= end) {
+        dateRange.push(new Date(currentDate));
+        currentDate.setDate(currentDate.getDate() + 1);
+    }
+    
+    // 创建表格
+    const table = document.createElement('table');
+    table.className = 'schedule-table';
+    
+    // 创建表头
+    const headerRow = document.createElement('tr');
+    const nameHeader = document.createElement('th');
+    nameHeader.textContent = '员工';
+    headerRow.appendChild(nameHeader);
+    
+    dateRange.forEach(date => {
+        const dateHeader = document.createElement('th');
+        dateHeader.textContent = `${date.getMonth() + 1}/${date.getDate()}`;
+        dateHeader.innerHTML += `<div>${getWeekday(date)}</div>`;
+        
+        // 标记今天
+        const today = new Date();
+        if (date.toDateString() === today.toDateString()) {
+            dateHeader.classList.add('current-day');
         }
-        function isMobile() {
-            return window.innerWidth <= 768;
+        
+        headerRow.appendChild(dateHeader);
+    });
+    table.appendChild(headerRow);
+    
+    // 添加员工排班行
+    state.staff.forEach(staff => {
+        const row = document.createElement('tr');
+        
+        const nameCell = document.createElement('td');
+        nameCell.textContent = staff;
+        row.appendChild(nameCell);
+        
+        dateRange.forEach(date => {
+            const dateStr = formatDate(date);
+            const statusCell = document.createElement('td');
+            statusCell.className = 'status-cell';
+            
+            let status = '班';
+            if (state.schedule[staff] && state.schedule[staff][dateStr]) {
+                status = state.schedule[staff][dateStr];
+            }
+            
+            const dot = document.createElement('div');
+            dot.className = `status-dot ${status}`;
+            dot.textContent = status;
+            statusCell.appendChild(dot);
+            
+            row.appendChild(statusCell);
+        });
+        
+        table.appendChild(row);
+    });
+    
+    tableContainer.appendChild(table);
+}
+function goToToday() {
+    const today = new Date();
+    const currentMonthKey = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}`;
+    
+    // 激活当前月份标签
+    activateTab(currentMonthKey);
+    
+    // 滚动到当前日期
+    setTimeout(() => {
+        const todayCell = document.querySelector(`.current-day`);
+        if (todayCell) {
+            todayCell.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'nearest', 
+                inline: 'center' 
+            });
         }
-        // 格式化日期为 YYYY-MM-DD
-        function formatDate(date) {
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            return `${year}-${month}-${day}`;
-        }
+    }, 300);
+    
+    // 添加日志
+    addLog(`已返回今日`);
+}
+    function isMobile() {
+        return window.innerWidth <= 768;
+    }
+// 格式化日期为 YYYY-MM-DD
+function formatDate(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
         // 页面加载完成后初始化系统
         document.addEventListener('DOMContentLoaded', function() {
             initSystem();
             setTimeout(() => {
                 goToToday();
+                // 移动端显示刷新按钮
+                if (isMobile()) {
+                    document.querySelector('.mobile-refresh-btn').style.display = 'inline-flex';
+                    // 移动端隐藏年份选择器（保险起见）
+                    document.getElementById('yearSelect').style.display = 'none';
+                }
             }, 350);
         });
 
@@ -1714,7 +1711,7 @@
                 dateArr.push(new Date(d));
                 d.setDate(d.getDate() + 1);
             }
-            // 每人休息岔开，严格上二休一
+            // 每人休息岔开，严格班-值-休
             staffList.forEach((staff, idx) => {
                 if (!state.schedule[staff]) state.schedule[staff] = {};
             });
@@ -1724,6 +1721,7 @@
                     // 以员工序号错开休息日
                     const cycleDay = (i + staffList.length - j) % 3;
                     let status = '班';
+                    if (cycleDay === 1) status = '值';
                     if (cycleDay === 2) status = '休';
                     const dateStr = formatDate(dateArr[i]);
                     state.schedule[staff][dateStr] = status;
@@ -1732,40 +1730,11 @@
             localStorage.setItem('schedule', JSON.stringify(state.schedule));
             renderAllTables();
             activateTab(state.activeMonth);
-            addLog('已自动生成上二休一排班');
+            addLog('已自动排班（班-值-休）');
             setTimeout(() => {
                 goToToday();
             }, 200);
         }
-
-        // 刷新所有内容
-        function refreshAll() {
-            // 刷新排班表格
-            renderAllTables();
-            
-            // 刷新日志
-            refreshLogs();
-            
-            // 添加刷新动画
-            const refreshBtn = document.querySelector('.refresh-btn i');
-            refreshBtn.style.animation = 'spin 1s linear';
-            setTimeout(() => {
-                refreshBtn.style.animation = '';
-            }, 1000);
-            
-            // 添加日志
-            addLog('手动刷新系统');
-        }
-
-        // 添加刷新动画样式
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes spin {
-                0% { transform: rotate(0deg); }
-                100% { transform: rotate(360deg); }
-            }
-        `;
-        document.head.appendChild(style);
     </script>
 </body>
 </html>
