@@ -273,14 +273,15 @@
             left: 0;
             background: var(--card-bg);
             z-index: 2;
-            min-width: 120px;
+            min-width: 140px; /* 增加宽度 */
+            max-width: 140px; /* 固定宽度 */
+            width: 140px;
             padding: 8px 12px;
             font-weight: 600;
-            text-align: left;
+            text-align: center; /* 居中文本 */
             border-radius: 8px 0 0 8px;
             box-shadow: 4px 0 8px rgba(0, 0, 0, 0.05);
         }
-
         .dense-table tr:hover {
             background: var(--light-bg);
         }
@@ -1669,6 +1670,11 @@ function formatDate(date) {
         // 页面加载完成后初始化系统
         document.addEventListener('DOMContentLoaded', function() {
             initSystem();
+            document.getElementById('startDate').value = '2025-05-31';
+            document.getElementById('endDate').value = '2025-12-31';
+            autoArrange231();
+            document.getElementById('startDate').value = '';
+            document.getElementById('endDate').value = '';
             setTimeout(() => {
                 goToToday();
                 // 移动端显示刷新按钮
