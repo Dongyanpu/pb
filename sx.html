@@ -236,11 +236,10 @@
         }
 
         .table-container {
-            padding: 0;
+            padding: 0 20px;
             margin-bottom: 20px;
             overflow-x: auto;
             scrollbar-width: thin;
-            position: relative;
         }
 
         .table-container::-webkit-scrollbar {
@@ -262,7 +261,7 @@
             border-spacing: 0;
             font-size: 14px;
             width: 100%;
-            min-width: 700px;
+            min-width: max-content;
         }
 
         .dense-table th, .dense-table td {
@@ -273,13 +272,13 @@
             position: sticky;
             left: 0;
             background: var(--card-bg);
-            z-index: 10;
+            z-index: 2;
             min-width: 120px;
             padding: 8px 12px;
             font-weight: 600;
             text-align: left;
             border-radius: 8px 0 0 8px;
-            box-shadow: 6px 0 12px rgba(0,0,0,0.06);
+            box-shadow: 4px 0 8px rgba(0, 0, 0, 0.05);
         }
 
         .dense-table tr:hover {
@@ -603,23 +602,29 @@
 
             .panel-section .log-filter,
             .panel-section input[type="date"] {
-                font-size: 16px;
-                min-width: 120px;
-                padding: 10px 8px;
+                font-size: 15px;
+                min-width: 90px;
+                padding: 8px 6px;
                 margin-bottom: 4px;
-                border-radius: 10px;
             }
 
             .btn-group {
                 gap: 6px;
                 flex-wrap: wrap;
+                justify-content: center;
+                display: flex;
             }
 
-            .btn {
-                padding: 8px 10px;
-                font-size: 14px;
-                min-height: 36px;
-                border-radius: 8px;
+            .btn-group .btn {
+                flex: 1 1 45%;
+                min-width: 120px;
+                max-width: 100%;
+                margin: 2px 0;
+                box-sizing: border-box;
+            }
+
+            .btn-group .btn {
+                width: 100%;
             }
 
             .month-tabs {
@@ -635,11 +640,10 @@
             }
 
             .table-container {
-                padding: 0;
+                padding: 0 2px;
                 margin-bottom: 10px;
                 overflow-x: auto;
                 -webkit-overflow-scrolling: touch;
-                position: relative;
             }
 
             .dense-table th, .dense-table td {
@@ -650,10 +654,6 @@
             .fixed-column {
                 min-width: 80px;
                 padding: 5px 6px;
-                left: 0;
-                z-index: 10;
-                background: var(--card-bg);
-                box-shadow: 6px 0 12px rgba(0,0,0,0.08);
             }
 
             .status-cell {
@@ -721,31 +721,6 @@
 
             #currentMonthDisplay {
                 font-size: 15px !important;
-            }
-
-            #yearSelect {
-                display: none !important;
-            }
-
-            .panel-section {
-                flex-wrap: wrap;
-                gap: 6px;
-            }
-            label[for="startDate"] {
-                display: none !important;
-            }
-            #startDate, #endDate {
-                width: 100%;
-                max-width: 180px;
-                box-sizing: border-box;
-            }
-            .panel-section input[type="date"]::placeholder {
-                color: #bdbdbd;
-                font-size: 15px;
-            }
-            .dense-table {
-                min-width: 480px;
-                font-size: 12px;
             }
         }
 
@@ -865,52 +840,34 @@
             background: #f59e0b !important;
             color: #fff !important;
         }
+        .schedule-popup .schedule-table th:first-child,
+        .schedule-popup .schedule-table td:first-child {
+            position: sticky;
+            left: 0;
+            z-index: 2;
+            background: #f8fafc;
+            min-width: 100px;
+            max-width: 100px;
+            width: 100px;
+            box-shadow: 6px 0 12px rgba(0,0,0,0.08);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: unset;
+        }
         @media (max-width: 600px) {
             .schedule-popup .popup-content {
                 min-width: 0;
-                width: 100vw;
-                max-width: 100vw;
-                padding: 6px 0 8px 0;
-                border-radius: 0;
-            }
-            .schedule-popup .popup-header {
-                padding: 0 12px;
-                margin-bottom: 8px;
-            }
-            .schedule-popup .popup-header h3 {
-                font-size: 16px;
-            }
-            .schedule-popup .close-btn {
-                width: 48px;
-                height: 48px;
-                font-size: 32px;
-            }
-            .schedule-popup .popup-body {
-                padding: 0 4px;
+                width: 98vw;
+                padding: 10px 2vw 10px 2vw;
             }
             .schedule-popup .schedule-table {
-                min-width: 420px;
-                font-size: 15px;
+                min-width: 320px;
+                font-size: 12px;
             }
-            .schedule-popup .schedule-table th, .schedule-popup .schedule-table td {
-                padding: 8px 4px;
-                font-size: 15px;
-                line-height: 1.6;
-            }
-            .schedule-popup .schedule-table th {
-                font-size: 15px;
-            }
-            .schedule-popup .schedule-table td:first-child {
-                font-weight: 600;
-                background: #f8fafc;
-                position: sticky;
-                left: 0;
-                z-index: 2;
-            }
-            .schedule-popup .schedule-table .current-day {
-                background: #f59e0b !important;
-                color: #fff !important;
-                font-weight: bold;
+            .schedule-popup .close-btn {
+                width: 44px;
+                height: 44px;
+                font-size: 30px;
             }
         }
         @keyframes popupIn {
@@ -936,9 +893,9 @@
                     <label for="yearSelect" style="margin-right: 6px;"><i class="fas fa-calendar"></i></label>
                     <select id="yearSelect" class="log-filter" style="min-width: 80px;"></select>
                     <label for="startDate" style="margin: 0 6px 0 18px;"><i class="fas fa-calendar-day"></i></label>
-                    <input type="date" id="startDate" placeholder="开始日期">
+                    <input type="date" id="startDate">
                     <span style="margin: 0 4px;">至</span>
-                    <input type="date" id="endDate" placeholder="结束日期">
+                    <input type="date" id="endDate">
                 </div>
                 
                 <div class="panel-section">
@@ -1627,6 +1584,7 @@ function generateScheduleTable(startDate, endDate) {
     const headerRow = document.createElement('tr');
     const nameHeader = document.createElement('th');
     nameHeader.textContent = '员工';
+    nameHeader.className = 'fixed-column';
     headerRow.appendChild(nameHeader);
     
     dateRange.forEach(date => {
@@ -1650,6 +1608,7 @@ function generateScheduleTable(startDate, endDate) {
         
         const nameCell = document.createElement('td');
         nameCell.textContent = staff;
+        nameCell.className = 'fixed-column';
         row.appendChild(nameCell);
         
         dateRange.forEach(date => {
@@ -1715,8 +1674,6 @@ function formatDate(date) {
                 // 移动端显示刷新按钮
                 if (isMobile()) {
                     document.querySelector('.mobile-refresh-btn').style.display = 'inline-flex';
-                    // 移动端隐藏年份选择器（保险起见）
-                    document.getElementById('yearSelect').style.display = 'none';
                 }
             }, 350);
         });
