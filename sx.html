@@ -8,16 +8,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         :root {
-            --primary: #3b82f6;
-            --primary-dark: #2563eb;
-            --success: #22c55e;
-            --warning: #eab308;
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --success: #10b981;
+            --warning: #f59e0b;
             --danger: #ef4444;
-            --light-bg: #f5f7fa;
-            --card-bg: #ffffff;
+            --light-bg: #f8fafc;
+            --card-bg: #fff;
             --border: #e2e8f0;
-            --text: #333;
+            --text: #1e293b;
             --text-light: #64748b;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
 
         * {
@@ -29,85 +31,40 @@
         body {
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             margin: 0;
-            padding: 15px;
-            background: linear-gradient(135deg, #f0f9ff 0%, #e6f7ff 100%);
+            padding: 20px;
+            background: var(--light-bg);
             color: var(--text);
             min-height: 100vh;
-            font-size: 16px;
+            font-size: 15px;
+            line-height: 1.5;
         }
 
         .container {
             max-width: 1400px;
             margin: 0 auto;
             background: var(--card-bg);
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            overflow: hidden;
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+            padding-bottom: 20px;
+            transition: all 0.3s ease;
         }
 
         .header {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-            background: linear-gradient(120deg, #1e3a8a 0%, var(--primary) 100%);
+            flex-direction: column;
+            gap: 12px;
+            padding: 24px 20px 16px 20px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
-            position: relative;
-            flex-wrap: wrap;
-        }
-
-  .year-selector {
-                display: flex;
-                align-items: center;
-                flex-wrap: wrap;
-                gap: 8px;
-                margin-top: 5px;
-                width: 100%;
-            }
-            
-            .mobile-stats {
-                display: flex;
-                gap: 12px;
-                margin-left: auto;
-                font-size: 13px;
-                background: rgba(255,255,255,0.1);
-                padding: 4px 10px;
-                border-radius: 20px;
-            }
-            
-            .mobile-stats span {
-                display: flex;
-                align-items: center;
-                gap: 4px;
-            }
-            
-            .system-info {
-                display: none;
-            }
-            
-            .year-selector label {
-                font-size: 13px;
-            }
-            
-            #yearSelect {
-                font-size: 13px;
-                padding: 5px 10px;
-            }
-        .header::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--success), var(--primary), var(--warning));
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
         }
 
         .system-title {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            margin-bottom: 10px;
+            gap: 12px;
+            margin-bottom: 12px;
         }
 
         .system-title h1 {
@@ -115,134 +72,75 @@
             font-weight: 700;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         .system-title h1 i {
-            background: rgba(255, 255, 255, 0.2);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 24px;
+            transition: all 0.3s ease;
         }
 
-        .year-selector {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 5px;
-        }
-
-        .year-selector label {
-            font-weight: 500;
-            font-size: 14px;
-            background: rgba(255,255,255,0.1);
-            padding: 4px 8px;
-            border-radius: 5px;
-        }
-
-        #yearSelect {
-            background: rgba(255, 255, 255, 0.15);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 8px;
-            padding: 6px 12px;
-            color: white;
-            font-weight: 500;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        #yearSelect:hover {
-            background: rgba(255, 255, 255, 0.25);
-        }
-
-        #yearSelect option {
-            background: var(--primary-dark);
-            color: white;
-        }
-
-        .system-info {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            background: rgba(255, 255, 255, 0.15);
-            padding: 12px 15px;
-            border-radius: 12px;
-            backdrop-filter: blur(5px);
-            min-width: 200px;
-            width: 100%;
-            max-width: 300px;
-        }
-
-        .info-item {
-            display: flex;
-            justify-content: space-between;
-            font-size: 14px;
-        }
-
-        .info-value {
-            font-weight: 600;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 2px 8px;
-            border-radius: 20px;
-            min-width: 40px;
-            text-align: center;
-        }
-
-        .content {
-            padding: 15px;
+        .system-title h1 i:hover {
+            transform: scale(1.05);
+            background: rgba(255,255,255,0.25);
         }
 
         .control-panel {
             display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
+            gap: 20px;
+            padding: 20px;
+            border-radius: 16px;
+            margin: 20px;
             background: var(--light-bg);
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.03);
+            box-shadow: var(--shadow);
         }
 
         .panel-section {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 12px;
             flex: 1;
-            min-width: 200px;
         }
 
         .panel-title {
+            font-size: 16px;
             font-weight: 600;
-            color: var(--primary-dark);
+            color: var(--text);
             display: flex;
             align-items: center;
-            gap: 6px;
-            font-size: 15px;
+            gap: 8px;
         }
 
         .date-range {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
             background: white;
-            padding: 8px 12px;
-            border-radius: 8px;
+            padding: 12px 20px;
+            border-radius: 12px;
             border: 1px solid var(--border);
-            flex-wrap: wrap;
+            box-shadow: var(--shadow);
         }
 
         .date-range input {
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 8px;
+            padding: 8px 12px;
             font-size: 14px;
-            width: 100%;
-            max-width: 150px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            transition: all 0.2s ease;
+        }
+
+        .date-range input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
         }
 
         .btn-group {
@@ -254,15 +152,27 @@
         .btn {
             padding: 10px 16px;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s ease;
             font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             font-size: 14px;
-            min-height: 42px;
+            min-height: 40px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn:active {
+            transform: translateY(0);
         }
 
         .btn i {
@@ -270,261 +180,247 @@
         }
 
         .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
         }
 
         .btn-success {
-            background: var(--success);
-            color: white;
-        }
-
-        .btn-success:hover {
-            background: #16a34a;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(34, 197, 94, 0.3);
+            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
         }
 
         .btn-warning {
-            background: var(--warning);
-            color: white;
-        }
-
-        .btn-warning:hover {
-            background: #ca8a04;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(234, 179, 8, 0.3);
+            background: linear-gradient(135deg, var(--warning) 0%, #d97706 100%);
         }
 
         .btn-danger {
-            background: var(--danger);
-            color: white;
-        }
-
-        .btn-danger:hover {
-            background: #dc2626;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(239, 68, 68, 0.3);
+            background: linear-gradient(135deg, var(--danger) 0%, #dc2626 100%);
         }
 
         .month-tabs {
             display: flex;
             gap: 4px;
+            padding: 0 20px;
+            margin-bottom: 16px;
             overflow-x: auto;
-            padding: 8px 0;
-            margin-bottom: 15px;
-            scrollbar-width: thin;
+            scrollbar-width: none;
         }
 
         .month-tabs::-webkit-scrollbar {
-            height: 6px;
-        }
-
-        .month-tabs::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
-        }
-
-        .month-tabs::-webkit-scrollbar-thumb {
-            background: #c1c1c1;
-            border-radius: 10px;
+            display: none;
         }
 
         .tab-button {
-            padding: 8px 15px;
+            padding: 8px 16px;
             border: none;
-            border-radius: 8px;
-            background: #e2e8f0;
+            border-radius: 10px;
+            background: var(--light-bg);
             cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 500;
-            min-width: 90px;
+            transition: all 0.2s ease;
+            font-weight: 600;
+            min-width: 80px;
             text-align: center;
             font-size: 14px;
+            color: var(--text-light);
         }
 
         .tab-button:hover {
-            background: #cbd5e1;
+            background: #e2e8f0;
+            color: var(--text);
         }
 
         .tab-button.active {
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
-            box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+            box-shadow: var(--shadow);
         }
 
         .table-container {
-            margin-top: 10px;
+            padding: 0 20px;
+            margin-bottom: 20px;
             overflow-x: auto;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 10px;
-            background: white;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.03);
-            max-width: 100%;
+            scrollbar-width: thin;
+        }
+
+        .table-container::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .table-container::-webkit-scrollbar-track {
+            background: var(--light-bg);
+            border-radius: 3px;
+        }
+
+        .table-container::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 3px;
         }
 
         .dense-table {
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0;
             font-size: 14px;
-            min-width: max-content;
             width: 100%;
+            min-width: max-content;
         }
 
-        .dense-table th {
-            background: #f8fafc;
-            font-weight: 600;
-            color: var(--text-light);
+        .dense-table th, .dense-table td {
+            padding: 8px 4px;
         }
 
         .fixed-column {
             position: sticky;
-    left: 0;
-    background: white;
-    z-index: 2;
-    box-shadow: 2px 0 3px rgba(0, 0, 0, 0.05);
-    min-width: 100px; /* 缩小最小宽度 */
-    max-width: 120px; /* 添加最大宽度限制 */
-    padding: 8px 10px; /* 调整内边距 */
-    font-weight: 500;
-    text-align: left; /* 确保文本左对齐 */
+            left: 0;
+            background: var(--card-bg);
+            z-index: 2;
+            min-width: 120px;
+            padding: 8px 12px;
+            font-weight: 600;
+            text-align: left;
+            border-radius: 8px 0 0 8px;
+            box-shadow: 4px 0 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .dense-table tr:hover {
+            background: var(--light-bg);
         }
 
         .date-header {
-            min-width: 40px;
-            padding: 8px 4px;
-            background: #f8f9fa;
-            border: 1px solid #eee;
+            min-width: 60px;
+            padding: 12px 4px;
+            background: var(--light-bg);
+            border: none;
             text-align: center;
-            font-size: 13px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 8px;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        .date-header.current-day, .current-day {
+            background: var(--primary) !important;
+            color: white !important;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
         }
 
         .status-cell {
-          min-width: 36px; /* 略微缩小状态单元格 */
-    padding: 0;
-    border: 1px solid #eee;
-    cursor: pointer;
-    text-align: center;
-    height: 36px; 
+            min-width: 50px;
+            padding: 4px;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            height: 50px;
+            transition: all 0.2s ease;
+        }
+
+        .status-cell:hover {
+            background: var(--light-bg);
         }
 
         .status-dot {
             width: 100%;
             height: 100%;
-            border-radius: 0;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 500;
-            transition: all 0.2s;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s ease;
         }
 
+        .status-dot.班 { background: #e0f2fe; color: #0284c7; }
+        .status-dot.值 { background: #e0f2fe; color: #0284c7; }
+        .status-dot.休 { background: var(--primary); color: white; }
+        .status-dot.假 { background: #fef3c7; color: #d97706; }
+
         .status-dot:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-            z-index: 1;
+            transform: scale(1.1);
+            box-shadow: var(--shadow);
         }
 
         .status-notes {
             display: flex;
-            gap: 20px;
-            padding: 15px 20px;
-            margin: 20px 0 15px;
-            background: #f8f9fa;
+            gap: 16px;
+            padding: 16px 20px;
+            margin: 0 20px 20px;
             border-radius: 12px;
-            border: 1px solid #eee;
-            flex-wrap: wrap;
-            color: #666;
-            font-size: 14px;
+            background: var(--light-bg);
+            box-shadow: var(--shadow);
         }
 
         .status-note-item {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
+            font-size: 14px;
+            color: var(--text);
         }
 
         .status-icon {
-            width: 28px;
-            height: 28px;
+            width: 24px;
+            height: 24px;
+            font-size: 14px;
             border-radius: 6px;
-            display: inline-flex;
+            display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
             font-weight: 600;
         }
 
-        .班 { background: #f0f0f0; color: #2e7d32; }
-        .值 { background: #f0f0f0; color: #2e7d32; }
-        .休 { background: var(--primary); color: white; }
-        .假 { background: #fff8e1; color: #f57c00; }
-
-        .status-icon.班 { 
-            background: #f0f0f0;
-            color: #2e7d32;
-            border: 1px solid #d4d4d4;
-        }
-        .status-icon.值 { 
-            background: #f0f0f0;
-            color: #2e7d32;
-            border: 1px solid #d4d4d4;
-        }
-        .status-icon.休 { 
-            background: var(--primary);
-            color: white;
-            border: 1px solid var(--primary);
-        }
-        .status-icon.假 { 
-            background: #fff8e1;
-            color: #f57c00;
-            border: 1px solid #ffe082;
-        }
+        .status-icon.班 { background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd; }
+        .status-icon.值 { background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd; }
+        .status-icon.休 { background: var(--primary); color: white; border: 1px solid var(--primary); }
+        .status-icon.假 { background: #fef3c7; color: #d97706; border: 1px solid #fcd34d; }
 
         .log-panel {
-            margin-top: 20px;
+            margin: 0 20px;
             padding: 20px;
-            background: #f8f9fa;
             border-radius: 12px;
-            border: 1px solid #eee;
+            background: var(--light-bg);
+            box-shadow: var(--shadow);
         }
 
         .log-header {
             display: flex;
-            gap: 12px;
+            gap: 16px;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 16px;
             flex-wrap: wrap;
         }
 
         .log-header h3 {
-            font-size: 18px;
-            color: var(--primary-dark);
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .log-filter {
             padding: 8px 12px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            background: white;
             font-size: 14px;
-            min-width: 130px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: white;
+            min-width: 120px;
+            transition: all 0.2s ease;
+        }
+
+        .log-filter:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
         }
 
         .log-container {
-            max-height: 250px;
-            overflow-y: auto;
-            padding-right: 8px;
-            background: white;
+            max-height: 200px;
+            padding: 8px;
             border-radius: 8px;
-            padding: 12px;
-            border: 1px solid var(--border);
+            background: white;
+            overflow-y: auto;
+            scrollbar-width: thin;
         }
 
         .log-container::-webkit-scrollbar {
@@ -532,31 +428,32 @@
         }
 
         .log-container::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
+            background: var(--light-bg);
+            border-radius: 3px;
         }
 
         .log-container::-webkit-scrollbar-thumb {
-            background: #c1c1c1;
-            border-radius: 10px;
+            background: var(--primary);
+            border-radius: 3px;
         }
 
         .log-entry {
-            padding: 8px 12px;
-            border-bottom: 1px solid #eee;
-            font-size: 14px;
             display: flex;
             gap: 8px;
+            padding: 8px 12px;
+            font-size: 14px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
         }
 
-        .log-entry:last-child {
-            border-bottom: none;
+        .log-entry:hover {
+            background: var(--light-bg);
         }
 
         .log-time {
-            color: var(--text-light);
             font-size: 12px;
-            min-width: 60px;
+            color: var(--text-light);
+            min-width: 50px;
         }
 
         .log-message {
@@ -564,54 +461,33 @@
         }
 
         .highlight {
-            background-color: #fffbe6;
-            border-left: 3px solid #faad14;
-            padding: 2px 5px;
+            background-color: #fef3c7;
+            border-left: 3px solid #f59e0b;
+            padding: 4px 8px;
             border-radius: 0 4px 4px 0;
         }
 
-        .current-day {
-            position: relative;
-            border: 2px solid var(--primary) !important;
-        }
-
-        .current-day::after {
-            content: '今';
-            position: absolute;
-            top: 2px;
-            right: 2px;
-            background: var(--primary);
-            color: white;
-            font-size: 10px;
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
+        .name-container {
             display: flex;
             align-items: center;
-            justify-content: center;
-        }
-
-        .name-container {
-         display: flex;
-    align-items: center;
-    gap: 4px; /* 缩小元素间距 */
-    width: 100%;
+            gap: 8px;
+            width: 100%;
         }
 
         .delete-staff-btn {
-         background: var(--danger);
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 20px; /* 缩小按钮尺寸 */
-    height: 20px;
-    cursor: pointer;
-    transition: all 0.3s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 10px; /* 缩小图标尺寸 */
-    flex-shrink: 0; /* 防止按钮被压缩 */
+            background: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            flex-shrink: 0;
         }
 
         .delete-staff-btn:hover {
@@ -620,20 +496,20 @@
         }
 
         .editable-name {
-outline: none;
-    padding: 4px 6px;
-    border-radius: 6px;
-    transition: all 0.3s;
-    min-width: 70px; /* 缩小最小宽度 */
-    font-size: 14px;
-    overflow: hidden;
-    text-overflow: ellipsis; /* 添加文本溢出省略号 */
-    white-space: nowrap; /* 防止换行 */
-    flex: 1; /* 占据剩余空间 */
+            outline: none;
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            min-width: 80px;
+            font-size: 14px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            flex: 1;
         }
 
         .editable-name:focus {
-            background: #e2e8f0;
+            background: #e0e7ff;
             box-shadow: 0 0 0 2px var(--primary);
         }
 
@@ -641,288 +517,265 @@ outline: none;
             background: var(--success);
             color: white;
             border: none;
-            border-radius: 6px;
-            padding: 8px 12px;
+            border-radius: 10px;
+            padding: 12px 20px;
             cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 500;
+            transition: all 0.2s ease;
+            font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             font-size: 14px;
+            box-shadow: var(--shadow);
         }
 
         .add-staff-btn:hover {
-            background: #16a34a;
+            background: #059669;
             transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
         }
 
         .empty-state {
             text-align: center;
-            padding: 30px 15px;
+            padding: 60px 20px;
             color: var(--text-light);
         }
 
         .empty-state i {
-            font-size: 40px;
-            margin-bottom: 12px;
-            color: #cbd5e1;
+            font-size: 48px;
+            margin-bottom: 16px;
+            color: var(--primary);
+            opacity: 0.5;
         }
 
-        /* 排班弹窗样式 */
-        .schedule-popup {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            padding: 15px;
-        }
-
-        .popup-content {
-            background: white;
-            border-radius: 16px;
-            width: 100%;
-            max-width: 1200px;
-            max-height: 90vh;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            animation: popupFadeIn 0.3s ease-out;
-        }
-
-        @keyframes popupFadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .popup-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
-            background: linear-gradient(120deg, #1e3a8a 0%, var(--primary) 100%);
-            color: white;
-        }
-
-        .popup-header h3 {
+        .empty-state h3 {
             font-size: 18px;
             font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text);
         }
 
-        .close-btn {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: all 0.3s;
-        }
-
-        .close-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .popup-body {
-            padding: 15px;
-            overflow: auto;
-            max-height: 70vh;
-        }
-
-        .schedule-table {
-            width: 100%;
-            border-collapse: collapse;
+        .empty-state p {
             font-size: 14px;
         }
 
-        .schedule-table th {
-            background: #f8fafc;
-            padding: 10px 6px;
-            text-align: center;
-            font-weight: 600;
-            color: var(--text-light);
-            border: 1px solid var(--border);
-        }
+        @media (max-width: 768px) {
+            body {
+                padding: 8px;
+            }
 
-        .schedule-table td {
-            padding: 8px 6px;
-            text-align: center;
-            border: 1px solid var(--border);
-        }
+            .container {
+                border-radius: 12px;
+                margin: 0;
+            }
 
-        .schedule-table .status-cell {
-            padding: 0;
-            height: 40px;
-        }
+            .header {
+                padding: 12px 8px;
+                border-radius: 0 0 12px 12px;
+            }
 
-     @media (max-width: 768px) {
-            /* 按钮组优化 - 单行排列 */
-             .system-info {
-        display: none !important;
-    }
- .status-notes {
-        gap: 10px !important;
-        padding: 12px 15px !important;
-        font-size: 12px !important;
-    }
-    
-    .status-icon {
-        width: 22px !important;
-        height: 22px !important;
-        font-size: 12px !important;
-    }
-   .btn-group {
-                flex-direction: row !important;
-                overflow-x: auto;
-                padding-bottom: 5px;
-                flex-wrap: nowrap !important;
-                scrollbar-width: thin;
-            }
-            
-            .btn-group::-webkit-scrollbar {
-                height: 4px;
-            }
-            
-            .btn-group::-webkit-scrollbar-track {
-                background: #f1f1f1;
-            }
-            
-            .btn-group::-webkit-scrollbar-thumb {
-                background: #c1c1c1;
-            }
-            
-            /* 按钮大小优化 */
-            .btn {
-                padding: 8px 12px !important;
-                font-size: 13px !important;
-                min-height: 40px !important;
-                min-width: max-content;
-                flex-shrink: 0;
-            }
-                .btn-group .btn {
-        flex-shrink: 0 !important;
-        min-width: auto !important;
-    }
-            .btn i {
-                font-size: 4px !important;
-            }
-            
-            /* 表格优化 */
-            .fixed-column {
-                min-width: 90px !important;
-                font-size: 13px !important;
-                padding: 8px 10px !important;
-            }
-            
-           .editable-name {
-        min-width: 60px !important; /* 移动端进一步缩小 */
-        font-size: 13px !important;
-        padding: 3px 4px !important;
-            }
-            
-            .date-header, .status-cell {
-                min-width: 32px !important;
-                height: 32px !important;
-                font-size: 12px !important;
-            }
-            
-            .status-dot {
-                font-size: 12px !important;
-            }
-            
-       .delete-staff-btn {
-        width: 18px !important;
-        height: 18px !important;
-        font-size: 9px !important;
-            }
-            
-            /* 控制面板优化 */
-            .control-panel {
-                gap: 12px !important;
-                padding: 12px !important;
-            }
-            
-            .panel-section {
-                min-width: 100% !important;
-            }
-            
-            .date-range {
-                padding: 6px 10px !important;
-            }
-            
-            .date-range input {
-                padding: 6px !important;
-                font-size: 13px !important;
- max-width: 130px !important;
-            }
-            
-
-            
-            .info-item {
-                font-size: 13px !important;
-            }
-        }
-        
-        /* 超小屏幕进一步优化 */
-        @media (max-width: 480px) {
-            .btn {
-                padding: 7px 10px !important;
-                font-size: 12px !important;
-            }
-            
-    .fixed-column {
-        min-width: 80px !important; /* 移动端进一步缩小 */
-        padding: 6px 8px !important; /* 调整内边距 */
-        font-size: 13px !important;
-            }
-            
-            .date-header, .status-cell {
-                min-width: 28px !important;
-                height: 28px !important;
-            }
-            
             .system-title h1 {
-                font-size: 20px !important;
+                font-size: 16px;
+                gap: 8px;
             }
-            
-            .system-title h1 i {
-                width: 32px !important;
-                height: 32px !important;
-                font-size: 16px
- !important;
-            }
-	.current-day {
-    position: relative;
-    border: 2px solid var(--primary) !important;
-    background-color: #e6f7ff !important;
-    font-weight: bold;
-}
 
-/* 添加日期单元格的今日标记 */
-.date-header.current-day::after {
-    content: '今';
-    position: absolute;
-    top: 2px;
-    right: 2px;
-    background: var(--primary);
-    color: white;
-    font-size: 10px;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+            .system-title h1 i {
+                width: 32px;
+                height: 32px;
+                font-size: 16px;
+            }
+
+            .control-panel {
+                flex-direction: column;
+                gap: 12px;
+                padding: 12px;
+                margin: 12px;
+                border-radius: 12px;
+            }
+
+            .panel-section {
+                width: 100%;
+            }
+
+            .panel-title {
+                font-size: 14px;
+            }
+
+            .date-range {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+                padding: 12px;
+            }
+
+            .date-range label {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                font-size: 13px;
+                color: var(--text);
+            }
+
+            .date-range input {
+                width: 100%;
+                padding: 8px;
+                font-size: 14px;
+            }
+
+            .btn-group {
+                gap: 6px;
+                flex-wrap: wrap;
+            }
+
+            .btn {
+                flex: 1;
+                min-width: 120px;
+                padding: 8px 12px;
+                font-size: 13px;
+                min-height: 36px;
+                justify-content: center;
+            }
+
+            .btn i {
+                font-size: 14px;
+            }
+
+            .month-tabs {
+                padding: 0 12px;
+                margin-bottom: 12px;
+                gap: 4px;
+            }
+
+            .tab-button {
+                padding: 6px 10px;
+                font-size: 12px;
+                min-width: 50px;
+            }
+
+            .table-container {
+                padding: 0 12px;
+                margin-bottom: 12px;
+            }
+
+            .dense-table th, .dense-table td {
+                font-size: 12px;
+                padding: 4px 2px;
+            }
+
+            .fixed-column {
+                min-width: 80px;
+                padding: 4px 6px;
+                font-size: 12px;
+            }
+
+            .status-cell {
+                min-width: 36px;
+                height: 36px;
+            }
+
+            .status-dot {
+                font-size: 12px;
+                border-radius: 6px;
+            }
+
+            .status-notes {
+                flex-direction: column;
+                gap: 8px;
+                padding: 12px;
+                margin: 0 12px 12px;
+            }
+
+            .status-note-item {
+                font-size: 12px;
+                gap: 8px;
+            }
+
+            .status-icon {
+                width: 20px;
+                height: 20px;
+                font-size: 12px;
+            }
+
+            .log-panel {
+                margin: 0 12px;
+                padding: 12px;
+            }
+
+            .log-header {
+                gap: 8px;
+                margin-bottom: 8px;
+            }
+
+            .log-header h3 {
+                font-size: 14px;
+            }
+
+            .log-filter {
+                padding: 6px 8px;
+                font-size: 12px;
+                min-width: 90px;
+            }
+
+            .log-container {
+                max-height: 120px;
+            }
+
+            .log-entry {
+                padding: 4px 6px;
+                font-size: 12px;
+            }
+
+            .log-time {
+                font-size: 11px;
+                min-width: 36px;
+            }
+
+            .editable-name {
+                font-size: 12px;
+                padding: 3px 6px;
+            }
+
+            .delete-staff-btn {
+                width: 20px;
+                height: 20px;
+                font-size: 11px;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .control-panel {
+                display: flex;
+                flex-direction: row;
+                align-items: flex-start;
+            }
+
+            .panel-section {
+                flex: 1;
+            }
+
+            .panel-section:first-child {
+                flex: 2;
+            }
+
+            .date-range {
+                flex-wrap: nowrap;
+            }
+
+            .date-range input {
+                flex: 1;
+            }
+
+            .btn-group {
+                justify-content: flex-start;
+            }
+
+            .log-header {
+                justify-content: space-between;
+            }
+
+            .log-container {
+                max-height: 200px;
+            }
         }
     </style>
 </head>
@@ -930,42 +783,18 @@ outline: none;
     <div class="container">
         <div class="header">
             <div class="system-title">
-                <h1><i class="fas fa-calendar-alt"></i> 绍兴售后排班管理系统</h1>
-                <div class="year-selector">
-                    <label for="yearSelect">选择年份：</label>
-                    <select id="yearSelect" class="log-filter"></select>
-                    <!-- 移动端统计信息 -->
-                    <div class="mobile-stats" id="mobileStats">
-                        <span><i class="fas fa-users"></i> <span id="mobileStaffCount">3</span></span>
-                        <span><i class="fas fa-calendar-check"></i> <span id="mobileScheduleCount">0</span></span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="system-info">
-                <div class="info-item">
-                    <span>当前月份：</span>
-                    <span class="info-value" id="currentMonthDisplay">六月</span>
-                </div>
-                <div class="info-item">
-                    <span>员工数量：</span>
-                    <span class="info-value" id="staffCount">3</span>
-                </div>
-                <div class="info-item">
-                    <span>排班记录：</span>
-                    <span class="info-value" id="scheduleCount">0</span>
-                </div>
-            </div>
+                <h1>绍兴售后排班管理系统</h1>
+            </div>        
         </div>        
         <div class="content">
             <div class="control-panel">
-                <div class="panel-section">
-                    <div class="panel-title"><i class="fas fa-calendar-day"></i> 日期范围</div>
-                    <div class="date-range">
-                        <input type="date" id="startDate" class="log-filter">
-                        <span>至</span>
-                        <input type="date" id="endDate" class="log-filter">
-                    </div>
+                <div class="panel-section" style="flex-direction: row; align-items: center; gap: 12px;">
+                    <label for="yearSelect" style="margin-right: 6px;"><i class="fas fa-calendar"></i> 年份</label>
+                    <select id="yearSelect" class="log-filter" style="min-width: 80px;"></select>
+                    <label for="startDate" style="margin: 0 6px 0 18px;"><i class="fas fa-calendar-day"></i> 日期</label>
+                    <input type="date" id="startDate">
+                    <span style="margin: 0 4px;">至</span>
+                    <input type="date" id="endDate">
                 </div>
                 
                 <div class="panel-section">
@@ -977,22 +806,15 @@ outline: none;
                         <button class="btn btn-primary" onclick="addStaff()">
                             <i class="fas fa-user-plus"></i> 添加员工
                         </button>
-        <button class="btn btn-warning" onclick="goToToday()">
-            <i class="fas fa-calendar-day"></i> 返回今日
-        </button>
-                    </div>
-                </div>
-                
-                <div class="panel-section">
-                    <div class="panel-title"><i class="fas fa-history"></i> 记录管理</div>
-                    <div class="btn-group">
+                        <button class="btn btn-success" onclick="autoArrange231()">
+                            <i class="fas fa-magic"></i> 自动生成上二休一
+                        </button>
+                        <button class="btn btn-warning" onclick="goToToday()">
+                            <i class="fas fa-calendar-day"></i> 返回今日
+                        </button>
                         <button class="btn btn-warning" onclick="resetSchedule()">
                             <i class="fas fa-undo"></i> 重置排班
                         </button>
-                        <button class="btn btn-danger" onclick="clearLogs()">
-                            <i class="fas fa-trash"></i> 清除记录
-                        </button>
-
                     </div>
                 </div>
             </div>
@@ -1035,6 +857,9 @@ outline: none;
                         <option value="→ 假">休假变更</option>
                         <option value="删除人员">删除记录</option>
                     </select>
+                    <button class="btn btn-danger" onclick="clearLogs()">
+                        <i class="fas fa-trash"></i> 清除记录
+                    </button>
                 </div>
                 <div class="log-container" id="logEntries">
                     <div class="log-entry">
@@ -1082,9 +907,6 @@ outline: none;
             // 渲染所有表格
             renderAllTables();
             
-            // 更新统计信息
-            updateStats();
-            
             // 激活当前月份标签
             activateTab(state.activeMonth);
             
@@ -1128,11 +950,22 @@ outline: none;
 }
 function setupDefaultDates() {
     const today = new Date();
-    const startDate = new Date(today.getFullYear(), today.getMonth(), 1);
-    const endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+    const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+    const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
     
-    document.getElementById('startDate').valueAsDate = startDate;
-    document.getElementById('endDate').valueAsDate = endDate;
+    const startDateInput = document.getElementById('startDate');
+    const endDateInput = document.getElementById('endDate');
+    
+    // 格式化日期为 YYYY-MM-DD
+    const formatDate = (date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+    
+    startDateInput.value = formatDate(firstDay);
+    endDateInput.value = formatDate(lastDay);
 }
         // 更新当前月份显示
         function updateCurrentMonthDisplay() {
@@ -1145,11 +978,22 @@ function setupDefaultDates() {
         // 设置默认日期范围
         function setupDefaultDates() {
             const today = new Date();
-            const startDate = new Date(today.getFullYear(), today.getMonth(), 1);
-            const endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+            const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+            const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
             
-            document.getElementById('startDate').valueAsDate = startDate;
-            document.getElementById('endDate').valueAsDate = endDate;
+            const startDateInput = document.getElementById('startDate');
+            const endDateInput = document.getElementById('endDate');
+            
+            // 格式化日期为 YYYY-MM-DD
+            const formatDate = (date) => {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            };
+            
+            startDateInput.value = formatDate(firstDay);
+            endDateInput.value = formatDate(lastDay);
         }
 
         // 初始化年份选择器
@@ -1178,15 +1022,10 @@ function setupDefaultDates() {
             if (state.year !== newYear) {
                 state.year = newYear;
                 localStorage.setItem('year', newYear.toString());
-                
-                // 重新生成月份标签和表格
                 generateMonthTabs();
                 renderAllTables();
-                
-                // 激活第一个月份标签
+                // 激活该年1月
                 activateTab(`${state.year}-01`);
-                
-                // 记录日志
                 addLog(`年份切换为 ${newYear}`);
             }
         }
@@ -1437,29 +1276,7 @@ function setupDefaultDates() {
             
             // 记录日志
             addLog(`员工 ${staff} ${date} 状态由 ${currentStatus} 改为 ${newStatus}`);
-            
-            // 更新统计数据
-            updateStats();
         }
-
-        // 更新统计数据
-        function updateStats() {
-            // 更新员工数量
- const staffCount = state.staff.length;
-            document.getElementById('staffCount').textContent = staffCount;
-            document.getElementById('mobileStaffCount').textContent = staffCount;
-            
-            // 计算排班记录数量
-            let scheduleCount = 0;
-            for (const staff in state.schedule) {
-                scheduleCount += Object.keys(state.schedule[staff]).length;
-            }
-            document.getElementById('scheduleCount').textContent = scheduleCount;
-            document.getElementById('mobileScheduleCount').textContent = scheduleCount;
-            
-            localStorage.setItem('staff', JSON.stringify(state.staff));
-        }
- document.addEventListener('DOMContentLoaded', initSystem);
 
         // 添加日志
         function addLog(message) {
@@ -1534,9 +1351,6 @@ function setupDefaultDates() {
                         // 更新日志
                         addLog(`员工更名：${original} → ${newName}`);
                         
-                        // 更新统计数据
-                        updateStats();
-                        
                         // 重置原始记录
                         event.target.dataset.original = newName;
                     }
@@ -1559,18 +1373,6 @@ function addStaff() {
         
         // 添加日志
         addLog(`添加新员工：${trimmedName}`);
-        
-        // 更新统计数据
-        updateStats();
-        
-        // 滚动到新员工
-        setTimeout(() => {
-            const newStaffRows = document.querySelectorAll('.fixed-column');
-            if (newStaffRows.length > 0) {
-                const lastStaffRow = newStaffRows[newStaffRows.length - 1];
-                lastStaffRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }
-        }, 300);
     }
 }
         // 删除员工
@@ -1588,9 +1390,6 @@ function addStaff() {
                 
                 // 添加日志
                 addLog(`删除员工：${staffName}`);
-                
-                // 更新统计数据
-                updateStats();
             }
         }
 
@@ -1606,12 +1405,6 @@ function resetSchedule() {
         
         // 添加日志
         addLog('所有排班已重置');
-        
-        // 更新统计数据
-        updateStats();
-        
-        // 显示成功提示
-        alert('排班已成功重置！');
     }
 }
 function clearLogs() {
@@ -1788,7 +1581,58 @@ function formatDate(date) {
     return `${year}-${month}-${day}`;
 }
         // 页面加载完成后初始化系统
-        document.addEventListener('DOMContentLoaded', initSystem);
+        document.addEventListener('DOMContentLoaded', function() {
+            initSystem();
+            setTimeout(() => {
+                goToToday();
+            }, 350);
+        });
+
+        // 上二休一自动排班，休息岔开
+        function autoArrange231() {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            if (!startDate || !endDate) {
+                alert('请选择日期范围');
+                return;
+            }
+            const staffList = state.staff;
+            if (staffList.length === 0) {
+                alert('请先添加员工');
+                return;
+            }
+            // 生成日期数组
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            const dateArr = [];
+            let d = new Date(start);
+            while (d <= end) {
+                dateArr.push(new Date(d));
+                d.setDate(d.getDate() + 1);
+            }
+            // 每人休息岔开，严格上二休一
+            staffList.forEach((staff, idx) => {
+                if (!state.schedule[staff]) state.schedule[staff] = {};
+            });
+            for (let i = 0; i < dateArr.length; i++) {
+                for (let j = 0; j < staffList.length; j++) {
+                    const staff = staffList[j];
+                    // 以员工序号错开休息日
+                    const cycleDay = (i + staffList.length - j) % 3;
+                    let status = '班';
+                    if (cycleDay === 2) status = '休';
+                    const dateStr = formatDate(dateArr[i]);
+                    state.schedule[staff][dateStr] = status;
+                }
+            }
+            localStorage.setItem('schedule', JSON.stringify(state.schedule));
+            renderAllTables();
+            activateTab(state.activeMonth);
+            addLog('已自动生成上二休一排班');
+            setTimeout(() => {
+                goToToday();
+            }, 200);
+        }
     </script>
 </body>
 </html>
