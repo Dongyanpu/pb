@@ -129,6 +129,18 @@
             box-shadow: var(--shadow);
         }
 
+        .date-range label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text);
+        }
+
+        .date-range label i {
+            font-size: 16px;
+            color: var(--primary);
+        }
+
         .date-range input {
             padding: 8px 12px;
             font-size: 14px;
@@ -202,6 +214,7 @@
             margin-bottom: 16px;
             overflow-x: auto;
             scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
         }
 
         .month-tabs::-webkit-scrollbar {
@@ -220,6 +233,7 @@
             text-align: center;
             font-size: 14px;
             color: var(--text-light);
+            white-space: nowrap;
         }
 
         .tab-button:hover {
@@ -609,11 +623,12 @@
             }
 
             .date-range label {
-                display: flex;
-                align-items: center;
-                gap: 6px;
-                font-size: 13px;
-                color: var(--text);
+                font-size: 0;
+                justify-content: center;
+            }
+
+            .date-range label i {
+                font-size: 18px;
             }
 
             .date-range input {
@@ -644,6 +659,7 @@
                 padding: 0 12px;
                 margin-bottom: 12px;
                 gap: 4px;
+                justify-content: flex-start;
             }
 
             .tab-button {
@@ -1034,58 +1050,46 @@ function setupDefaultDates() {
         const monthTabs = document.getElementById('monthTabs');
         monthTabs.innerHTML = '';
         
-        // 获取当前活跃月份信息
-        const [activeYear, activeMonth] = state.activeMonth.split('-').map(Number);
+        const currentMonth = parseInt(state.activeMonth.split('-')[1]);
+        const months = [];
         
-        // 确定要显示的月份范围
-        let monthsToShow = [];
-        if (isMobile()) {
-            // 移动端只显示当前月及前后各一个月
-            monthsToShow = [
-                {month: activeMonth - 1, year: activeYear},
-                {month: activeMonth, year: activeYear},
-                {month: activeMonth + 1, year: activeYear}
-            ];
+        // 获取当前月份的前后两个月
+        for (let i = -1; i <= 1; i++) {
+            let month = currentMonth + i;
+            let year = state.year;
             
-            // 处理跨年情况
-            monthsToShow = monthsToShow.map(m => {
-                if (m.month === 0) return {month: 12, year: m.year - 1};
-                if (m.month === 13) return {month: 1, year: m.year + 1};
-                return m;
-            }).filter(m => m.month >= 1 && m.month <= 12);
-        } else {
-            // 桌面端显示所有月份
-            for (let month = 1; month <= 12; month++) {
-                monthsToShow.push({month, year: activeYear});
+            if (month < 1) {
+                month = 12;
+                year--;
+            } else if (month > 12) {
+                month = 1;
+                year++;
             }
+            
+            months.push({
+                year: year,
+                month: month,
+                key: `${year}-${month.toString().padStart(2, '0')}`
+            });
         }
         
-        // 生成月份标签
-        monthsToShow.forEach(({month, year}) => {
-            const monthName = month < 10 ? `0${month}` : month;
-            const monthKey = `${year}-${monthName}`;
-            const monthLabel = `${year}年${month}月`;
+        months.forEach(({ year, month, key }) => {
+            const button = document.createElement('button');
+            button.className = 'tab-button';
+            button.dataset.month = key;
+            button.textContent = `${month}月`;
             
-            const tab = document.createElement('button');
-            tab.className = 'tab-button';
-            tab.textContent = monthLabel;
-            tab.dataset.month = monthKey;
-            
-            if (state.activeMonth === monthKey) {
-                tab.classList.add('active');
+            if (key === state.activeMonth) {
+                button.classList.add('active');
             }
             
-            tab.addEventListener('click', () => {
-                activateTab(monthKey);
-                addLog(`切换到${monthLabel}`);
-                
-                // 移动端点击后重新生成月份标签
-                if (isMobile()) {
-                    generateMonthTabs();
-                }
+            button.addEventListener('click', () => {
+                activateTab(key);
+                // 更新月份标签
+                generateMonthTabs();
             });
             
-            monthTabs.appendChild(tab);
+            monthTabs.appendChild(button);
         });
     }
 
